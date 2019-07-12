@@ -3,9 +3,15 @@
 const cli = require('@ianwalter/cli')
 const { print } = require('@ianwalter/print')
 const prompts = require('prompts')
+const release = require('.')
 
 async function run () {
   const config = cli({ name: 'release' })
+
+  if (config._.length) {
+    config.version = config.length[1]
+    delete config._
+  }
 
   if (!config.version) {
     Object.assign(config, await prompts({
@@ -22,6 +28,8 @@ async function run () {
       ]
     }))
   }
+
+  await release(config)
 
   print.log(config)
 }

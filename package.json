@@ -5,10 +5,12 @@
     "release": "cli.js"
   },
   "scripts": {
-    "release": "./cli.js"
+    "release": "./cli.js",
+    "test": "bff"
   },
+  "main": "index.js",
   "dependencies": {
-    "@ianwalter/cli": "^1.1.1",
+    "@ianwalter/cli": "^1.2.0",
     "@ianwalter/print": "^3.0.1",
     "execa": "^2.0.3",
     "prompts": "^2.1.0"
