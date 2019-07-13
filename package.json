@@ -13,7 +13,9 @@
     "@ianwalter/cli": "^1.2.0",
     "@ianwalter/print": "^3.0.1",
     "execa": "^2.0.3",
-    "prompts": "^2.1.0"
+    "new-github-release-url": "^1.0.0",
+    "prompts": "^2.1.0",
+    "semver": "^6.2.0"
   },
   "devDependencies": {
     "@ianwalter/bff": "^6.3.1",
