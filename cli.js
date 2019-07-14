@@ -16,6 +16,7 @@ async function run () {
   }
 
   await execa('commits', [`v${$package.version}`], { stdio: 'inherit' })
+  process.stdout.write('\n')
 
   if (config.version) {
     // TODO: check if it's higher than current version
