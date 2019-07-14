@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const cli = require('@ianwalter/cli')
+const execa = require('execa')
 const { print } = require('@ianwalter/print')
 const prompts = require('prompts')
 const semver = require('semver')
@@ -14,6 +15,8 @@ async function run () {
     delete config._
   }
 
+  await execa('commits', [`v${$package.version}`], { stdio: 'inherit' })
+
   if (config.version) {
     // TODO: check if it's higher than current version
   } else {
@@ -23,19 +26,40 @@ async function run () {
     const prePatch = semver.inc($package.version, 'prepatch')
     const preMinor = semver.inc($package.version, 'preminor')
     const preMajor = semver.inc($package.version, 'premajor')
-    Object.assign(config, await prompts({
+
+    const { version } = await prompts({
       type: 'select',
       name: 'version',
       message: 'Select the semantic version to publish',
       choices: [
-        { title: `Patch\t${patch}`, value: patch },
-        { title: `Minor\t${minor}`, value: minor },
-        { title: `Major\t${major}`, value: major },
-        { title: `Pre-patch\t${prePatch}`, value: prePatch },
-        { title: `Pre-minor\t${preMinor}`, value: preMinor },
-        { title: `Pre-major\t${preMajor}`, value: preMajor }
+        {
+          title: `Patch\t${patch}`,
+          value: { version: patch }
+        },
+        {
+          title: `Minor\t${minor}`,
+          value: { version: minor }
+        },
+        {
+          title: `Major\t${major}`,
+          value: { version: major }
+        },
+        {
+          title: `Pre-patch\t${prePatch}`,
+          value: { version: prePatch, isPrerelease: true }
+        },
+        {
+          title: `Pre-minor\t${preMinor}`,
+          value: { version: preMinor, isPrerelease: true }
+        },
+        {
+          title: `Pre-major\t${preMajor}`,
+          value: { version: preMajor, isPrerelease: true }
+        }
       ]
-    }))
+    })
+
+    Object.assign(config, version)
   }
 
   await release({ $package, ...config })

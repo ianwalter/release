@@ -1,5 +1,7 @@
 {
-  "name": "release",
+  "name": "@ianwalter/release",
+  "description": "",
+  "version": "0.0.0",
   "license": "SEE LICENSE IN LICENSE",
   "bin": {
     "release": "cli.js"
@@ -9,8 +11,17 @@
     "test": "bff"
   },
   "main": "index.js",
+  "files": [
+    "cli.js",
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianwalter/release.git"
+  },
   "dependencies": {
     "@ianwalter/cli": "^1.2.0",
+    "@ianwalter/commits": "^0.0.3",
     "@ianwalter/print": "^3.0.1",
     "execa": "^2.0.3",
     "new-github-release-url": "^1.0.0",
@@ -21,6 +32,5 @@
     "@ianwalter/bff": "^6.3.1",
     "@ianwalter/eslint-config": "^2.1.0",
     "@ianwalter/renovate-config": "^1.1.1"
-  },
-  "version": "1.0.0"
+  }
 }
