@@ -5,9 +5,12 @@ const execa = require('execa')
 const { print } = require('@ianwalter/print')
 const prompts = require('prompts')
 const semver = require('semver')
-const release = require('.')
+const { precheck, release } = require('.')
 
 async function run () {
+  //
+  await precheck()
+
   const { $package, ...config } = cli({ name: 'release' })
 
   if (config._.length) {
