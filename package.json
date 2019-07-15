@@ -1,7 +1,7 @@
 {
   "name": "@ianwalter/release",
   "description": "CLI workflow for releasing JavaScript packages",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "SEE LICENSE IN LICENSE",
   "bin": {
     "release": "cli.js"
@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@ianwalter/bff": "^6.3.1",
-    "@ianwalter/eslint-config": "2.0.1",
+    "@ianwalter/eslint-config": "^2.1.1",
     "@ianwalter/renovate-config": "^1.1.1"
   },
   "renovate": {
