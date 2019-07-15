@@ -70,6 +70,10 @@ const release = async ({ $package, ...config }) => {
     }
   }
 
+  // Get the markdown summary of the commits since the last release before the
+  // version commit is created.
+  const { markdown } = await commits(oldTag)
+
   // Update the package.json version.
   await execa('yarn', ['version', '--new-version', config.version])
 
@@ -91,9 +95,6 @@ const release = async ({ $package, ...config }) => {
     { stdio: 'inherit' }
   )
 
-  // Get the markdown summary of the commits since the last release.
-  const { markdown } = await commits(oldTag)
-
   // Determine the repository URL.
   const { stdout: remote } = await execa('git', ['config', 'remote.origin.url'])
   const [repo] = remote.split(':')[1].split('.git')
@@ -109,7 +110,7 @@ const release = async ({ $package, ...config }) => {
 
   //
   process.stdout.write('\n')
-  print.success(`Published ${$package.name}@${$package.version}!`)
+  print.success(`Published ${$package.name} ${newTag}!`)
 
   // Display the link to create a GitHub release.
   const releaseLink = `[Create a GitHub release for this tag!](${releaseUrl})`
