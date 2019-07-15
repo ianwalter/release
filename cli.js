@@ -9,16 +9,18 @@ const { oneLine } = require('common-tags')
 const { precheck, release } = require('.')
 
 async function run () {
-  // Run the precheck that checks for git issues before doing anything.
-  await precheck()
-
   // Build the config.
   const { $package, ...config } = cli({ name: 'release' })
+
+  if (!config.yolo) {
+    // Run the precheck that checks for git issues before doing anything.
+    await precheck()
+  }
 
   // If there was an argument passed to the command, attempt to use it as the
   // new version number.
   if (config._.length) {
-    const version = config.length[1]
+    const version = config._[0]
     if (semver.valid(version)) {
       config.version = version
     } else {
@@ -46,44 +48,45 @@ async function run () {
     const preMinor = semver.inc($package.version, 'preminor')
     const preMajor = semver.inc($package.version, 'premajor')
 
-    const { version } = await prompts({
-      type: 'select',
-      name: 'version',
-      message: 'Select the semantic version to publish',
-      choices: [
-        {
-          title: `Patch\t${patch}`,
-          value: { version: patch }
-        },
-        {
-          title: `Minor\t${minor}`,
-          value: { version: minor }
-        },
-        {
-          title: `Major\t${major}`,
-          value: { version: major }
-        },
-        {
-          title: `Pre-patch\t${prePatch}`,
-          value: { version: prePatch, isPrerelease: true }
-        },
-        {
-          title: `Pre-minor\t${preMinor}`,
-          value: { version: preMinor, isPrerelease: true }
-        },
-        {
-          title: `Pre-major\t${preMajor}`,
-          value: { version: preMajor, isPrerelease: true }
-        }
-      ]
-    })
+    const { version } = await prompts(
+      {
+        type: 'select',
+        name: 'version',
+        message: 'Select the semantic version to publish',
+        choices: [
+          {
+            title: `Patch\t${patch}`,
+            value: { version: patch }
+          },
+          {
+            title: `Minor\t${minor}`,
+            value: { version: minor }
+          },
+          {
+            title: `Major\t${major}`,
+            value: { version: major }
+          },
+          {
+            title: `Pre-patch\t${prePatch}`,
+            value: { version: prePatch, isPrerelease: true }
+          },
+          {
+            title: `Pre-minor\t${preMinor}`,
+            value: { version: preMinor, isPrerelease: true }
+          },
+          {
+            title: `Pre-major\t${preMajor}`,
+            value: { version: preMajor, isPrerelease: true }
+          }
+        ],
+      },
+      { onCancel: () => process.exit(1) }
+    )
 
     Object.assign(config, version)
   }
 
   await release({ $package, ...config })
-
-  print.log(config)
 }
 
 run().catch(err => print.error(err))

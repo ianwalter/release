@@ -22,29 +22,49 @@ const precheck = async () => {
 }
 
 const release = async ({ $package, ...config }) => {
-  // Re-install node modules using yarn.
-  await execa('yarn', ['--force'])
-
-  // Run the test script if it's defined in the project's package.json.
-  if ($package.scripts.test) {
-    await execa('yarn', ['test'])
-  }
-
   // Create the tag string from the configured version.
   const oldTag = `v${$package.version}`
   const newTag = `v${config.version}`
 
-  // If --branch was specified, create a release branch instead of publishing
-  // from the master branch.
-  if (config.branch) {
-    // Determine if a branch name was specified for the release branch or
-    // generate one.
-    const branch = typeof config.branch === 'string'
-      ? config.branch
-      : `release-${newTag}`
+  //
+  const { stdout: localTag } = execa('git', ['tag', '--list', newTag])
+  if (localTag !== '') {
+    throw new Error(`Local tag for ${newTag} already exists!`)
+  }
 
-    // Checkout the release branch.
-    await execa('git', ['checkout', '-b', branch])
+  //
+  const tagRef = `refs/tags/${newTag}`
+  const { stdout: remoteTag } = execa('git', ['ls-remote', 'origin', tagRef])
+  if (remoteTag !== '') {
+    throw new Error(`Remote tag for ${newTag} already exists!`)
+  }
+
+  if (!config.yolo) {
+    // Re-install node modules using yarn.
+    await execa('yarn', ['--force'])
+
+    // Run the lint script if it's defined in the project's package.json.
+    if ($package.scripts.lint) {
+      await execa('yarn', ['lint'])
+    }
+
+    // Run the test script if it's defined in the project's package.json.
+    if ($package.scripts.test) {
+      await execa('yarn', ['test'])
+    }
+
+    // If --branch was specified, create a release branch instead of publishing
+    // from the master branch.
+    if (config.branch) {
+      // Determine if a branch name was specified for the release branch or
+      // generate one.
+      const branch = typeof config.branch === 'string'
+        ? config.branch
+        : `release-${newTag}`
+
+      // Checkout the release branch.
+      await execa('git', ['checkout', '-b', branch])
+    }
   }
 
   // Update the package.json version.
@@ -59,7 +79,7 @@ const release = async ({ $package, ...config }) => {
 
   // If --branch was specified, prompt for confirmation before tagging and
   // publishing the package.
-  if (config.branch) {
+  if (config.branch && !config.yolo) {
 
   }
 
@@ -69,6 +89,7 @@ const release = async ({ $package, ...config }) => {
 
   // Publish the package.
   await execa('yarn', ['publish'])
+  print.success(`Published ${$package.name}@${$package.version}!`)
 
   // Get the markdown summary of the commits since the last release.
   const { markdown } = await commits(oldTag)
