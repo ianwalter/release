@@ -1,9 +1,11 @@
-const path = require('path')
-const { promises: fs } = require('fs')
 const { print } = require('@ianwalter/print')
 const execa = require('execa')
 const newGithubReleaseUrl = require('new-github-release-url')
 const commits = require('@ianwalter/commits')
+const marked = require('marked')
+const TerminalRenderer = require('marked-terminal')
+
+marked.setOptions({ renderer: new TerminalRenderer() })
 
 const precheck = async () => {
   // Checkout master.
