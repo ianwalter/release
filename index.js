@@ -107,6 +107,9 @@ const release = async ({ $package, ...config }) => {
     isPrerelease: config.isPrerelease,
   })
 
+  //
+  print.success(`\nPublished ${$package.name}@${$package.version}!`)
+
   // Display the link to create a GitHub release.
   const releaseLink = `[Create a GitHub release for this tag!](${releaseUrl})`
   print.log('🔗', marked(releaseLink).trimEnd() + '\n')
