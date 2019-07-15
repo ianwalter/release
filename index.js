@@ -28,7 +28,7 @@ const release = async ({ $package, ...config }) => {
   const newTag = `v${config.version}`
 
   //
-  const { stdout: localTag } = await execa('git', ['tag', '--list', newTag])
+  const { stdout: localTag } = await execa('git', ['tags', newTag])
   if (localTag !== '') {
     throw new Error(`Local tag for ${newTag} already exists!`)
   }
@@ -73,7 +73,7 @@ const release = async ({ $package, ...config }) => {
 
   // Push the version commit and tag upstream.
   await execa('git', ['push', '-u'])
-  await execa('git', ['push', newTag])
+  await execa('git', ['push', 'origin', newTag])
 
   // If --branch was specified, prompt for confirmation before tagging and
   // publishing the package.
