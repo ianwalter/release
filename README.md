@@ -21,4 +21,4 @@ support for branch protections and private registries.
 - [x] Create a tag and push it up.
 - [x] Publish the package and display a link to create a new GitHub release with
       the tag from the previous step.
-- [ ] If `--yolo` is specified, only the last 2 steps are executed.
+- [x] If `--yolo` is specified, only the last 2 steps are executed.

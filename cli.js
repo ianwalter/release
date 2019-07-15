@@ -17,12 +17,23 @@ async function run () {
     await precheck()
   }
 
+  // Display the list of commits added since the last version was published.
+  await execa('commits', [`v${$package.version}`], { stdio: 'inherit' })
+  process.stdout.write('\n')
+
   // If there was an argument passed to the command, attempt to use it as the
   // new version number.
   if (config._.length) {
     const version = config._[0]
     if (semver.valid(version)) {
-      config.version = version
+      if (semver.lt(version, $package.version)) {
+        print.warn(oneLine`
+          The specified version <${version}> needs to be higher than the current
+          version <${$package.version}>
+        `)
+      } else {
+        config.version = version
+      }
     } else {
       print.warn(oneLine`
         The specified version <${version}> is not a valid semantic version
@@ -31,16 +42,7 @@ async function run () {
     delete config._
   }
 
-  // Display the list of commits added since the last version was published.
-  await execa('commits', [`v${$package.version}`], { stdio: 'inherit' })
-  process.stdout.write('\n')
-
-  if (config.version && semver.gt($package.version, config.version)) {
-    throw new Error(oneLine`
-      The specified version <${config.version}> needs to be higher than the
-      current version <${$package.version}>
-    `)
-  } else {
+  if (!config.version) {
     const patch = semver.inc($package.version, 'patch')
     const minor = semver.inc($package.version, 'minor')
     const major = semver.inc($package.version, 'major')
