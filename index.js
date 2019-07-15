@@ -4,6 +4,7 @@ const newGithubReleaseUrl = require('new-github-release-url')
 const commits = require('@ianwalter/commits')
 const marked = require('marked')
 const TerminalRenderer = require('marked-terminal')
+const prompts = require('prompts')
 
 marked.setOptions({ renderer: new TerminalRenderer() })
 
@@ -46,15 +47,18 @@ const release = async ({ $package, ...config }) => {
 
   if (!config.yolo) {
     // Re-install node modules using yarn.
+    process.stdout.write('\n')
     await execa('yarn', ['--force'], stdio)
 
     // Run the lint script if it's defined in the project's package.json.
     if ($package.scripts.lint) {
+      process.stdout.write('\n')
       await execa('yarn', ['lint'], stdio)
     }
 
     // Run the test script if it's defined in the project's package.json.
     if ($package.scripts.test) {
+      process.stdout.write('\n')
       await execa('yarn', ['test'], stdio)
     }
   }
@@ -97,7 +101,12 @@ const release = async ({ $package, ...config }) => {
     print.log('🔗', marked(prLink).trimEnd() + '\n')
 
     if (!config.yolo) {
-      //
+      await prompts({
+        type: 'confirm',
+        message: 'Proceed with publishing?',
+        initial: true,
+        onCancel: () => process.exit(1) // TODO: add rollback functionality.
+      })
     }
   }
 
