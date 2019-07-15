@@ -29,3 +29,5 @@
       are executed
 
 [npUrl]: https://github.com/sindresorhus/np
+[yarnUrl]: https://yarnpkg.com/en/
+[lernaUrl]: https://lerna.js.org/

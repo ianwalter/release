@@ -23,7 +23,7 @@ async function run () {
 
   if (!config.yolo) {
     // Run the precheck that checks for git issues before doing anything.
-    await precheck()
+    await precheck(config)
   }
 
   // Display the list of commits added since the last version was published.

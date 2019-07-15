@@ -1,4 +1,4 @@
-const { print } = require('@ianwalter/print')
+const { Print } = require('@ianwalter/print')
 const execa = require('execa')
 const newGithubReleaseUrl = require('new-github-release-url')
 const commits = require('@ianwalter/commits')
@@ -10,24 +10,30 @@ marked.setOptions({ renderer: new TerminalRenderer() })
 
 const stdio = { stdio: 'inherit' }
 
-const precheck = async () => {
+const precheck = async (config) => {
+  const print = new Print({ logLevel: config.logLevel || 'info' })
+
   // Checkout master.
   await execa('git', ['checkout', 'master'])
 
   // Check if there are uncommited changes in the current working directory.
   const { stdout: status } = await execa('git', ['status', '-s'])
+  print.debug(status)
   if (status !== '') {
     throw new Error('Uncommited changes!')
   }
 
   // Check if the upstream branch has commits that the local one doesn't.
   const { stdout: upstreamStatus } = await execa('git', ['rev-list', '..@{u}'])
+  print.debug(upstreamStatus)
   if (upstreamStatus !== '') {
     throw new Error('Upstream has changes!')
   }
 }
 
 const release = async ({ $package, ...config }) => {
+  const print = new Print({ logLevel: config.logLevel || 'info' })
+
   // Create the tag string from the configured version.
   const oldTag = `v${$package.version}`
   const newTag = `v${config.version}`
@@ -82,16 +88,22 @@ const release = async ({ $package, ...config }) => {
   const { markdown } = await commits(oldTag)
 
   // Update the package.json version.
-  await execa('yarn', ['version', '--new-version', config.version])
+  const versionArgs = ['version', '--new-version', config.version]
+  const { stdout: versionOutput } = await execa('yarn', versionArgs)
+  print.debug(versionOutput)
 
   // Push the version commit and tag upstream.
-  await execa('git', ['push', '-u'])
-  await execa('git', ['push', 'origin', newTag])
+  const { stdout: pushOutput } = await execa('git', ['push', '-u'])
+  print.debug(pushOutput)
+  const { stdout: pushTag } = await execa('git', ['push', 'origin', newTag])
+  print.debug(pushTag)
 
   // Determine the repository URL.
   const { stdout: remote } = await execa('git', ['config', 'remote.origin.url'])
+  print.debug('Remote:', remote)
   const [repo] = remote.split(':')[1].split('.git')
   const repoUrl = `https://github.com/${repo}`
+  print.debug('Repo URL:', repoUrl)
 
   // If --branch was specified, prompt for confirmation before tagging and
   // publishing the package.
@@ -128,6 +140,7 @@ const release = async ({ $package, ...config }) => {
     body: markdown,
     isPrerelease: config.isPrerelease
   })
+  print.debug('Release URL:', releaseUrl)
 
   // Print a success message letting the user know their package version has
   // be published.
