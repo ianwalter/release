@@ -69,24 +69,16 @@ const release = async ({ $package, ...config }) => {
   }
 
   // Update the package.json version.
-  $package.version = config.version
-  await fs.writeFile(path.resolve('package.json'), JSON.stringify($package, 2))
+  await execa('yarn', ['version', '--new-version', config.version])
 
-  // Commit the version update.
-  await execa('git', ['commit', '-m', newTag])
-
-  // Push the commit upstream.
-  await execa('git', ['push', '-u'])
+  // Push the version commit and tag upstream.
+  await execa('git', ['push', '-u', '--tags'])
 
   // If --branch was specified, prompt for confirmation before tagging and
   // publishing the package.
   if (config.branch && !config.yolo) {
 
   }
-
-  // Create the release tag and push it upstream.
-  await execa('git', ['tag', newTag])
-  await execa('git', ['push', newTag])
 
   // Publish the package.
   await execa('yarn', ['publish'])
