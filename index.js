@@ -1,3 +1,4 @@
+const path = require('path')
 const { promises: fs } = require('fs')
 const { print } = require('@ianwalter/print')
 const execa = require('execa')
