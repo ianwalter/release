@@ -11,7 +11,7 @@ marked.setOptions({ renderer: new TerminalRenderer() })
 const stdio = { stdio: 'inherit' }
 
 const precheck = async (config) => {
-  const print = new Print({ logLevel: config.logLevel || 'info' })
+  const print = new Print({ level: config.logLevel || 'info' })
 
   // Checkout master.
   await execa('git', ['checkout', 'master'])
@@ -32,7 +32,7 @@ const precheck = async (config) => {
 }
 
 const release = async ({ $package, ...config }) => {
-  const print = new Print({ logLevel: config.logLevel || 'info' })
+  const print = new Print({ level: config.logLevel || 'info' })
 
   // Create the tag string from the configured version.
   const oldTag = `v${$package.version}`
