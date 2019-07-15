@@ -80,7 +80,7 @@ async function run () {
             title: `Pre-major\t${preMajor}`,
             value: { version: preMajor, isPrerelease: true }
           }
-        ],
+        ]
       },
       { onCancel: () => process.exit(1) }
     )

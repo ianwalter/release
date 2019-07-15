@@ -7,6 +7,7 @@
     "release": "cli.js"
   },
   "scripts": {
+    "lint": "eslint .",
     "release": "./cli.js",
     "test": "bff"
   },
@@ -33,7 +34,18 @@
   },
   "devDependencies": {
     "@ianwalter/bff": "^6.3.1",
-    "@ianwalter/eslint-config": "^2.1.0",
+    "@ianwalter/eslint-config": "2.0.1",
     "@ianwalter/renovate-config": "^1.1.1"
+  },
+  "renovate": {
+    "extends": [
+      "@ianwalter"
+    ]
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@ianwalter"
+    ]
   }
 }

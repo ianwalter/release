@@ -95,7 +95,7 @@ const release = async ({ $package, ...config }) => {
     print.log('🔗', marked(prLink).trimEnd() + '\n')
 
     if (!config.yolo) {
-
+      //
     }
   }
 
@@ -112,7 +112,7 @@ const release = async ({ $package, ...config }) => {
     repoUrl,
     tag: newTag,
     body: markdown,
-    isPrerelease: config.isPrerelease,
+    isPrerelease: config.isPrerelease
   })
 
   //
