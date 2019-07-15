@@ -1,6 +1,6 @@
 {
   "name": "@ianwalter/release",
-  "description": "",
+  "description": "CLI workflow for releasing JavaScript packages",
   "version": "0.1.0",
   "license": "SEE LICENSE IN LICENSE",
   "bin": {
@@ -20,6 +20,12 @@
     "type": "git",
     "url": "git+https://github.com/ianwalter/release.git"
   },
+  "keywords": [
+    "release",
+    "publish",
+    "yarn",
+    "semver"
+  ],
   "dependencies": {
     "@ianwalter/cli": "^1.2.0",
     "@ianwalter/commits": "^0.0.5",

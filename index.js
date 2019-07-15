@@ -7,6 +7,8 @@ const TerminalRenderer = require('marked-terminal')
 
 marked.setOptions({ renderer: new TerminalRenderer() })
 
+const stdio = { stdio: 'inherit' }
+
 const precheck = async () => {
   // Checkout master.
   await execa('git', ['checkout', 'master'])
@@ -44,16 +46,16 @@ const release = async ({ $package, ...config }) => {
 
   if (!config.yolo) {
     // Re-install node modules using yarn.
-    await execa('yarn', ['--force'])
+    await execa('yarn', ['--force'], stdio)
 
     // Run the lint script if it's defined in the project's package.json.
     if ($package.scripts.lint) {
-      await execa('yarn', ['lint'])
+      await execa('yarn', ['lint'], stdio)
     }
 
     // Run the test script if it's defined in the project's package.json.
     if ($package.scripts.test) {
-      await execa('yarn', ['test'])
+      await execa('yarn', ['test'], stdio)
     }
   }
 
@@ -67,7 +69,7 @@ const release = async ({ $package, ...config }) => {
       : `release-${newTag}`
 
     // Checkout the release branch.
-    await execa('git', ['checkout', '-b', config.branch])
+    await execa('git', ['checkout', '-b', config.branch], stdio)
   }
 
   // Get the markdown summary of the commits since the last release before the
@@ -104,7 +106,7 @@ const release = async ({ $package, ...config }) => {
   await execa(
     'yarn',
     ['publish', '--new-version', config.version, '--access', access],
-    { stdio: 'inherit' }
+    stdio
   )
 
   // Create the release on GitHub.
