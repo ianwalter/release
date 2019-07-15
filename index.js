@@ -19,14 +19,14 @@ const precheck = async (config) => {
   // Check if there are uncommited changes in the current working directory.
   const { stdout: status } = await execa('git', ['status', '-s'])
   if (status !== '') {
-    print.debug(status)
+    print.debug('Uncommited changes check\n', status)
     throw new Error('Uncommited changes!')
   }
 
   // Check if the upstream branch has commits that the local one doesn't.
   const { stdout: upstreamStatus } = await execa('git', ['rev-list', '..@{u}'])
   if (upstreamStatus !== '') {
-    print.debug(upstreamStatus)
+    print.debug('Upstream changes check\n', upstreamStatus)
     throw new Error('Upstream has changes!')
   }
 }
@@ -90,13 +90,13 @@ const release = async ({ $package, ...config }) => {
   // Update the package.json version.
   const versionArgs = ['version', '--new-version', config.version]
   const { stdout: versionOutput } = await execa('yarn', versionArgs)
-  print.debug(versionOutput)
+  print.debug('Version output\n', versionOutput)
 
   // Push the version commit and tag upstream.
   const { stdout: pushOutput } = await execa('git', ['push', '-u'])
-  print.debug(pushOutput)
+  print.debug('Push output\n', pushOutput)
   const { stdout: pushTag } = await execa('git', ['push', 'origin', newTag])
-  print.debug(pushTag)
+  print.debug('Push tag output\n', pushTag)
 
   // Determine the repository URL.
   const { stdout: remote } = await execa('git', ['config', 'remote.origin.url'])
