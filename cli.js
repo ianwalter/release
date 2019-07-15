@@ -12,6 +12,15 @@ async function run () {
   // Build the config.
   const { $package, ...config } = cli({ name: 'release' })
 
+  // Warn the user about adding the access flag if this looks like it might be
+  // the first time this package is being published.
+  if ($package.version === '0.0.0' && !config.access) {
+    print.warn(oneLine`
+      If this is the first time publishing this package and you intend to make
+      it publicly available on npm, make sure to add --access public
+    `)
+  }
+
   if (!config.yolo) {
     // Run the precheck that checks for git issues before doing anything.
     await precheck()

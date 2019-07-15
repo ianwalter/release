@@ -32,13 +32,13 @@ const release = async ({ $package, ...config }) => {
   const oldTag = `v${$package.version}`
   const newTag = `v${config.version}`
 
-  //
+  // Check if there is already a local tag for the new version.
   const { stdout: localTag } = await execa('git', ['tags', newTag])
   if (localTag !== '') {
     throw new Error(`Local tag for ${newTag} already exists!`)
   }
 
-  //
+  // Check if there is already a remote tag for the new version.
   const ref = `refs/tags/${newTag}`
   const { stdout: remoteTag } = await execa('git', ['ls-remote', 'origin', ref])
   if (remoteTag !== '') {
@@ -114,12 +114,12 @@ const release = async ({ $package, ...config }) => {
   }
 
   // Publish the package.
-  const access = config.access || 'public'
-  await execa(
-    'yarn',
-    ['publish', '--new-version', config.version, '--access', access],
-    stdio
-  )
+  process.stdout.write('\n')
+  let publishArgs = ['publish', '--new-version', config.version]
+  if (config.access) {
+    publishArgs = publishArgs.concat(['--access', config.access])
+  }
+  await execa('yarn', publishArgs, stdio)
 
   // Create the release on GitHub.
   const releaseUrl = newGithubReleaseUrl({
@@ -129,7 +129,8 @@ const release = async ({ $package, ...config }) => {
     isPrerelease: config.isPrerelease
   })
 
-  //
+  // Print a success message letting the user know their package version has
+  // be published.
   process.stdout.write('\n')
   print.success(`Published ${$package.name} ${newTag}!`)
 
