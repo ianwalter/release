@@ -82,8 +82,12 @@ const release = async ({ $package, ...config }) => {
   }
 
   // Publish the package.
-  const publishArgs = ['publish', '--new-version', config.version]
-  await execa('yarn', publishArgs, { stdio: 'inherit' })
+  const access = config.access || 'public'
+  await execa(
+    'yarn',
+    ['publish', '--new-version', config.version, '--access', access],
+    { stdio: 'inherit' }
+  )
 
   // Get the markdown summary of the commits since the last release.
   const { markdown } = await commits(oldTag)
