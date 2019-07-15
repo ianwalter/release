@@ -88,11 +88,15 @@ const release = async ({ $package, ...config }) => {
 
   // If --branch was specified, prompt for confirmation before tagging and
   // publishing the package.
-  if (config.branch && !config.yolo) {
+  if (config.branch) {
     // Display the link to create a pull request for the release branch.
     const prUrl = `${repoUrl}/compare/master..${config.branch}`
     const prLink = `[Create a pull request for this release!](${prUrl})`
     print.log('🔗', marked(prLink).trimEnd() + '\n')
+
+    if (!config.yolo) {
+
+    }
   }
 
   // Publish the package.
