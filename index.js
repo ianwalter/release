@@ -18,15 +18,15 @@ const precheck = async (config) => {
 
   // Check if there are uncommited changes in the current working directory.
   const { stdout: status } = await execa('git', ['status', '-s'])
-  print.debug(status)
   if (status !== '') {
+    print.debug(status)
     throw new Error('Uncommited changes!')
   }
 
   // Check if the upstream branch has commits that the local one doesn't.
   const { stdout: upstreamStatus } = await execa('git', ['rev-list', '..@{u}'])
-  print.debug(upstreamStatus)
   if (upstreamStatus !== '') {
+    print.debug(upstreamStatus)
     throw new Error('Upstream has changes!')
   }
 }
