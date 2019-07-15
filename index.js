@@ -27,14 +27,14 @@ const release = async ({ $package, ...config }) => {
   const newTag = `v${config.version}`
 
   //
-  const { stdout: localTag } = execa('git', ['tag', '--list', newTag])
+  const { stdout: localTag } = await execa('git', ['tag', '--list', newTag])
   if (localTag !== '') {
     throw new Error(`Local tag for ${newTag} already exists!`)
   }
 
   //
-  const tagRef = `refs/tags/${newTag}`
-  const { stdout: remoteTag } = execa('git', ['ls-remote', 'origin', tagRef])
+  const ref = `refs/tags/${newTag}`
+  const { stdout: remoteTag } = await execa('git', ['ls-remote', 'origin', ref])
   if (remoteTag !== '') {
     throw new Error(`Remote tag for ${newTag} already exists!`)
   }
