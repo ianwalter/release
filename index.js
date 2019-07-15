@@ -61,7 +61,7 @@ const release = async ({ $package, ...config }) => {
     if (config.branch) {
       // Determine if a branch name was specified for the release branch or
       // generate one.
-      const branch = typeof config.branch === 'string'
+      config.branch = typeof config.branch === 'string'
         ? config.branch
         : `release-${newTag}`
 
@@ -81,10 +81,18 @@ const release = async ({ $package, ...config }) => {
   await execa('git', ['push', '-u'])
   await execa('git', ['push', 'origin', newTag])
 
+  // Determine the repository URL.
+  const { stdout: remote } = await execa('git', ['config', 'remote.origin.url'])
+  const [repo] = remote.split(':')[1].split('.git')
+  const repoUrl = `https://github.com/${repo}`
+
   // If --branch was specified, prompt for confirmation before tagging and
   // publishing the package.
   if (config.branch && !config.yolo) {
-
+    // Display the link to create a pull request for the release branch.
+    const prUrl = `${repoUrl}/compare/master..${config.branch}`
+    const prLink = `[Create a pull request for this release!](${prUrl})`
+    print.log('🔗', marked(prLink).trimEnd() + '\n')
   }
 
   // Publish the package.
@@ -94,11 +102,6 @@ const release = async ({ $package, ...config }) => {
     ['publish', '--new-version', config.version, '--access', access],
     { stdio: 'inherit' }
   )
-
-  // Determine the repository URL.
-  const { stdout: remote } = await execa('git', ['config', 'remote.origin.url'])
-  const [repo] = remote.split(':')[1].split('.git')
-  const repoUrl = `https://github.com/${repo}`
 
   // Create the release on GitHub.
   const releaseUrl = newGithubReleaseUrl({

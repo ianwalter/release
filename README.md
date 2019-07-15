@@ -12,7 +12,7 @@ support for branch protections and private registries.
 - [x] Check and fail if upstream has new commits.
 - [x] Display commits and prompt for a new semantic version if one wasn't
       specified as the first arugment.
-- [ ] Check and fail if tags already exist locally or on remote.
+- [x] Check and fail if tags already exist locally or on remote.
 - [x] Remove and re-install dependencies.
 - [x] Run tests if there's a test script.
 - [x] Update the version in `package.json` and commit the version bump.
