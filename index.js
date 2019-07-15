@@ -73,6 +73,7 @@ const release = async ({ $package, ...config }) => {
       : `release-${newTag}`
 
     // Checkout the release branch.
+    process.stdout.write('\n')
     await execa('git', ['checkout', '-b', config.branch], stdio)
   }
 
@@ -101,12 +102,14 @@ const release = async ({ $package, ...config }) => {
     print.log('🔗', marked(prLink).trimEnd() + '\n')
 
     if (!config.yolo) {
-      await prompts({
-        type: 'confirm',
-        message: 'Proceed with publishing?',
-        initial: true,
-        onCancel: () => process.exit(1) // TODO: add rollback functionality.
-      })
+      await prompts(
+        {
+          type: 'confirm',
+          message: 'Proceed with publishing?',
+          initial: true
+        },
+        { onCancel: () => process.exit(1) } // TODO: add rollback functionality.
+      )
     }
   }
 

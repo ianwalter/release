@@ -16,7 +16,7 @@ support for branch protections and private registries.
 - [x] Remove and re-install dependencies.
 - [x] Run tests if there's a test script.
 - [x] Update the version in `package.json` and commit the version bump.
-- [ ] If `--branch` is specified, create a release branch, push it, link to a
+- [x] If `--branch` is specified, create a release branch, push it, link to a
       new PR, and prompt for a confirmation to publish.
 - [x] Create a tag and push it up.
 - [x] Publish the package and display a link to create a new GitHub release with
