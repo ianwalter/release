@@ -55,19 +55,19 @@ const release = async ({ $package, ...config }) => {
     if ($package.scripts.test) {
       await execa('yarn', ['test'])
     }
+  }
 
-    // If --branch was specified, create a release branch instead of publishing
-    // from the master branch.
-    if (config.branch) {
-      // Determine if a branch name was specified for the release branch or
-      // generate one.
-      config.branch = typeof config.branch === 'string'
-        ? config.branch
-        : `release-${newTag}`
+  // If --branch was specified, create a release branch instead of publishing
+  // from the master branch.
+  if (config.branch) {
+    // Determine if a branch name was specified for the release branch or
+    // generate one.
+    config.branch = typeof config.branch === 'string'
+      ? config.branch
+      : `release-${newTag}`
 
-      // Checkout the release branch.
-      await execa('git', ['checkout', '-b', branch])
-    }
+    // Checkout the release branch.
+    await execa('git', ['checkout', '-b', branch])
   }
 
   // Get the markdown summary of the commits since the last release before the
