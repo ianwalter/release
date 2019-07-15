@@ -163,10 +163,10 @@
     getopts "^2.2.5"
     read-pkg-up "^6.0.0"
 
-"@ianwalter/commits@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@ianwalter/commits/-/commits-0.0.3.tgz#75c23a8c23687fc7da61a9487a026deee0cef122"
-  integrity sha512-aXFrGPUoR8TYkL/LOjW0dSao/mRNmGy4xgtskloTVzt/yZrfP7bQsFNZP+VSeCZ4khA58z/xjQYLKz88wSuGHw==
+"@ianwalter/commits@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@ianwalter/commits/-/commits-0.0.4.tgz#f000d2754ca5599e965b130fe10965e8de17b60d"
+  integrity sha512-wJxom4xxjbZRlnqcHkqnb2+dR+VBx9K51L7dFaeLEpN3lZ3XwqccNVPgKb6U347RQWUZT5D3Zc7h4AM0QkRPRA==
   dependencies:
     "@ianwalter/cli" "^1.2.0"
     "@ianwalter/print" "^3.0.1"

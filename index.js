@@ -108,7 +108,8 @@ const release = async ({ $package, ...config }) => {
   })
 
   //
-  print.success(`\nPublished ${$package.name}@${$package.version}!`)
+  process.stdout.write('\n')
+  print.success(`Published ${$package.name}@${$package.version}!`)
 
   // Display the link to create a GitHub release.
   const releaseLink = `[Create a GitHub release for this tag!](${releaseUrl})`

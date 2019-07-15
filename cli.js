@@ -86,6 +86,10 @@ async function run () {
     )
 
     Object.assign(config, version)
+
+    // Add a newline after the prompt output to separate it from the yarn
+    // publish output.
+    process.stdout.write('\n')
   }
 
   await release({ $package, ...config })
