@@ -86,7 +86,13 @@ const release = async ({ $package, ...config }) => {
 
   // Get the markdown summary of the commits since the last release before the
   // version commit is created.
-  const { markdown } = await commits(oldTag)
+  let markdown
+  try {
+    const { stdout } = await commits(oldTag)
+    markdown = stdout
+  } catch (err) {
+    print.debug('Error fetching commits:', err)
+  }
 
   // Update the package.json version.
   const versionArgs = [
