@@ -72,7 +72,8 @@ const release = async ({ $package, ...config }) => {
   await execa('yarn', ['version', '--new-version', config.version])
 
   // Push the version commit and tag upstream.
-  await execa('git', ['push', '-u', '--tags'])
+  await execa('git', ['push', '-u'])
+  await execa('git', ['push', newTag])
 
   // If --branch was specified, prompt for confirmation before tagging and
   // publishing the package.
