@@ -5,24 +5,39 @@ const execa = require('execa')
 const { print } = require('@ianwalter/print')
 const prompts = require('prompts')
 const semver = require('semver')
+const { oneLine } = require('common-tags')
 const { precheck, release } = require('.')
 
 async function run () {
-  //
+  // Run the precheck that checks for git issues before doing anything.
   await precheck()
 
+  // Build the config.
   const { $package, ...config } = cli({ name: 'release' })
 
+  // If there was an argument passed to the command, attempt to use it as the
+  // new version number.
   if (config._.length) {
-    config.version = config.length[1]
+    const version = config.length[1]
+    if (semver.valid(version)) {
+      config.version = version
+    } else {
+      print.warn(oneLine`
+        The specified version <${version}> is not a valid semantic version
+      `)
+    }
     delete config._
   }
 
+  // Display the list of commits added since the last version was published.
   await execa('commits', [`v${$package.version}`], { stdio: 'inherit' })
   process.stdout.write('\n')
 
-  if (config.version) {
-    // TODO: check if it's higher than current version
+  if (config.version && semver.gt($package.version, config.version)) {
+    throw new Error(oneLine`
+      The specified version <${config.version}> needs to be higher than the
+      current version <${$package.version}>
+    `)
   } else {
     const patch = semver.inc($package.version, 'patch')
     const minor = semver.inc($package.version, 'minor')

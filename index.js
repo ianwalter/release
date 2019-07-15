@@ -2,6 +2,7 @@ const { promises: fs } = require('fs')
 const { print } = require('@ianwalter/print')
 const execa = require('execa')
 const newGithubReleaseUrl = require('new-github-release-url')
+const commits = require('@ianwalter/commits')
 
 const precheck = async () => {
   // Checkout master.
@@ -13,7 +14,7 @@ const precheck = async () => {
     throw new Error('Uncommited changes!')
   }
 
-  // Check if local and remote are on the same commit.
+  // Check if the upstream branch has commits that the local one doesn't.
   const { stdout: upstreamStatus } = await execa('git', ['rev-list', '..@{u}'])
   if (upstreamStatus !== '') {
     throw new Error('Upstream has changes!')
@@ -21,42 +22,73 @@ const precheck = async () => {
 }
 
 const release = async ({ $package, ...config }) => {
-  //
-  await execa('rm', ['-rf', 'node_modules'])
-  await execa('yarn')
+  // Re-install node modules using yarn.
+  await execa('yarn', ['--force'])
 
-  // Run the test script if it is defined in the project's package.json.
+  // Run the test script if it's defined in the project's package.json.
   if ($package.scripts.test) {
     await execa('yarn', ['test'])
   }
 
-  // Pull the latest from upstream.
-  await execa('git', ['pull'])
+  // Create the tag string from the configured version.
+  const oldTag = `v${$package.version}`
+  const newTag = `v${config.version}`
 
-  // Checkout a release branch.
-  const tag = `v${config.version}`
-  await execa('git', ['checkout', '-b', `release-${tag}`])
+  // If --branch was specified, create a release branch instead of publishing
+  // from the master branch.
+  if (config.branch) {
+    // Determine if a branch name was specified for the release branch or
+    // generate one.
+    const branch = typeof config.branch === 'string'
+      ? config.branch
+      : `release-${newTag}`
+
+    // Checkout the release branch.
+    await execa('git', ['checkout', '-b', branch])
+  }
 
   // Update the package.json version.
   $package.version = config.version
-  await fs.writeFile(path.resolve('package.json', ))
+  await fs.writeFile(path.resolve('package.json'), JSON.stringify($package, 2))
 
   // Commit the version update.
-  await execa('git', ['commit', '-m', tag])
+  await execa('git', ['commit', '-m', newTag])
 
-  // Push the release branch upstream.
+  // Push the commit upstream.
   await execa('git', ['push', '-u'])
 
+  // If --branch was specified, prompt for confirmation before tagging and
+  // publishing the package.
+  if (config.branch) {
+
+  }
+
+  // Create the release tag and push it upstream.
+  await execa('git', ['tag', newTag])
+  await execa('git', ['push', newTag])
+
   // Publish the package.
-  await execa('yarn', 'publish')
+  await execa('yarn', ['publish'])
+
+  // Get the markdown summary of the commits since the last release.
+  const { markdown } = await commits(oldTag)
+
+  // Determine the repository URL.
+  const { stdout: remote } = await execa('git', ['config', 'remote.origin.url'])
+  const [repo] = remote.split(':')[1].split('.git')
+  const repoUrl = `https://github.com/${repo}`
 
   // Create the release on GitHub.
-  const githubUrl = newGithubReleaseUrl({
-    tag,
-    isPrerelease: config.isPrerelease
+  const releaseUrl = newGithubReleaseUrl({
+    repoUrl,
+    tag: newTag,
+    body: markdown,
+    isPrerelease: config.isPrerelease,
   })
 
-  print.success('', githubUrl)
+  // Display the link to create a GitHub release.
+  const releaseLink = `[Create a GitHub release for this tag!](${releaseUrl})`
+  print.log('🔗', marked(releaseLink).trimEnd() + '\n')
 }
 
 module.exports = { precheck, release }

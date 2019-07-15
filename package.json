@@ -23,6 +23,7 @@
     "@ianwalter/cli": "^1.2.0",
     "@ianwalter/commits": "^0.0.3",
     "@ianwalter/print": "^3.0.1",
+    "common-tags": "^1.8.0",
     "execa": "^2.0.3",
     "new-github-release-url": "^1.0.0",
     "prompts": "^2.1.0",
