@@ -5,6 +5,7 @@ const commits = require('@ianwalter/commits')
 const marked = require('marked')
 const TerminalRenderer = require('marked-terminal')
 const prompts = require('prompts')
+const writePackage = require('write-pkg')
 
 marked.setOptions({ renderer: new TerminalRenderer() })
 
@@ -134,13 +135,33 @@ const release = async ({ $package, ...config }) => {
   const { stdout: pushTag } = await execa('git', ['push', 'origin', newTag])
   print.debug('Push tag output:\n', pushTag)
 
-  // Publish the package.
-  process.stdout.write('\n')
-  let publishArgs = ['publish', '--new-version', config.version]
-  if (config.access) {
-    publishArgs = publishArgs.concat(['--access', config.access])
+  // Iterate over configured registries or default to npm.
+  for (let registry of (config.registries || ['npm'])) {
+    process.stdout.write('\n')
+    print.debug('Publishing to registry:', registry)
+
+    // Allow specifying 'github' for GitHub Package Registry.
+    registry = registry === 'github' ? 'https://npm.pkg.github.com/' : registry
+
+    // If publishing to a non-npm registry, the registry URL needs to be
+    // specified in the package.json's publishConfig field.
+    if (registry !== 'npm') {
+      await writePackage({ publishConfig: registry })
+    }
+
+    // Publish the package.
+    let publishArgs = ['publish', '--new-version', config.version]
+    if (config.access) {
+      publishArgs = publishArgs.concat(['--access', config.access])
+    }
+    await execa('yarn', publishArgs, stdio)
+
+    // Remove any publishConfig changes to package.json now that it's been
+    // published.
+    if (registry !== 'npm') {
+      await execa('git', ['checkout', '.'])
+    }
   }
-  await execa('yarn', publishArgs, stdio)
 
   // Create the release on GitHub.
   const releaseUrl = newGithubReleaseUrl({

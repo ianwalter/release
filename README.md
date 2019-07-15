@@ -7,7 +7,7 @@
 
 * Focus on [`yarn`][yarnUrl] (and [`lerna`][lernaUrl] in the future)
 * A release branch workflow to help with GitHub master branch protections
-* Better support for external registries (and multiple registries in the future)
+* Support for multiple (and external) registries
 
 ## Workflow
 
@@ -27,6 +27,32 @@
       the tag from the previous step
 - [x] If `--yolo` is specified, most of checks are skipped and the last 3 steps
       are executed
+
+## Installation
+
+```console
+yarn add @ianwalter/release --dev
+```
+
+## Multiple Registries
+
+You can specify that your package be published to multiple registries by
+configuring `release` in your package.json, for example:
+
+```js
+{
+  "release": {
+    "registries": [
+      "npm",
+      "github",
+      "https://some.other.registry.com/"
+    ]
+  }
+}
+```
+
+You can specify `npm` for npm and `github` for GitHub Package Registry.
+Otherwise, specify the registry URL.
 
 [npUrl]: https://github.com/sindresorhus/np
 [yarnUrl]: https://yarnpkg.com/en/
