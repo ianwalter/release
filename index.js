@@ -67,7 +67,7 @@ const release = async ({ $package, ...config }) => {
       : `release-${newTag}`
 
     // Checkout the release branch.
-    await execa('git', ['checkout', '-b', branch])
+    await execa('git', ['checkout', '-b', config.branch])
   }
 
   // Get the markdown summary of the commits since the last release before the
