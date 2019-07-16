@@ -30,7 +30,7 @@
     "@ianwalter/cli": "^1.2.0",
     "@ianwalter/commits": "^0.0.5",
     "@ianwalter/print": "^3.0.1",
-    "@ianwalter/update-package": "^0.0.1",
+    "@ianwalter/update-package": "^0.0.2",
     "common-tags": "^1.8.0",
     "execa": "^2.0.3",
     "marked": "^0.7.0",
