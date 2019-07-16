@@ -93,7 +93,7 @@ const release = async ({ $package, ...config }) => {
   try {
     const { description, markdown } = await commits(oldTag)
     if (!config.isVersionZero) {
-      releaseBody += `${description.replace('HEAD', newTag)}\n\n`
+      releaseBody += `${description.replace('HEAD', newTag)}:\n\n`
     }
     releaseBody += markdown
   } catch (err) {
