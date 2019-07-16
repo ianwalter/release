@@ -130,9 +130,7 @@ const release = async ({ $package, ...config }) => {
     }
   }
 
-  // Create the version tag and push it to the remote.
-  const { stdout: tagOutput } = await execa('git', ['tag', newTag])
-  print.debug('Tag output:\n', tagOutput)
+  // Push the version tag to the remote.
   const { stdout: pushTag } = await execa('git', ['push', 'origin', newTag])
   print.debug('Push tag output:\n', pushTag)
 
