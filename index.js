@@ -39,6 +39,9 @@ const release = async ({ $package, ...config }) => {
   const oldTag = `v${$package.version}`
   const newTag = `v${config.version}`
 
+  // Destructure and add defaults to config properties.
+  const { registries = ['npm'] } = config
+
   // Check if there is already a local tag for the new version.
   const { stdout: localTag } = await execa('git', ['tags', newTag])
   if (localTag !== '') {
@@ -97,10 +100,12 @@ const release = async ({ $package, ...config }) => {
     print.debug('Error fetching commits:', err)
   }
 
-  // Update the package.json version.
-  const versionArgs = ['version', '--new-version', config.version]
-  const { stdout: versionOutput } = await execa('yarn', versionArgs)
-  print.debug('Version output:\n', versionOutput)
+  // Update the package.json version and commit it.
+  await updatePackage({ version: config.version })
+  const { stdout: addOutput } = await execa('git', ['add', 'package.json'])
+  print.debug('Version add output:\n', addOutput)
+  const { stdout: commitOutput } = await execa('git', ['commit', '-m', newTag])
+  print.debug('Version commit output:\n', commitOutput)
 
   // Push the version commit upstream.
   const { stdout: pushOutput } = await execa('git', ['push', '-u'])
@@ -133,12 +138,17 @@ const release = async ({ $package, ...config }) => {
     }
   }
 
-  // Push the version tag to the remote.
-  const { stdout: pushTag } = await execa('git', ['push', 'origin', newTag])
-  print.debug('Push tag output:\n', pushTag)
+  // Create and push the version tag to the remote if not publishing to the
+  // GitHub Package Registry (since it creates a version tag automatically).
+  if (registries.indexOf('github') === -1) {
+    const { stdout: tagOutput } = await execa('git', ['tag', newTag])
+    print.debug('Tag output:\n', tagOutput)
+    const { stdout: pushTag } = await execa('git', ['push', 'origin', newTag])
+    print.debug('Push tag output:\n', pushTag)
+  }
 
-  // Iterate over configured registries or default to npm.
-  for (let registry of (config.registries || ['npm'])) {
+  // Iterate over configured registries.
+  for (let registry of registries) {
     process.stdout.write('\n')
     print.debug('Publishing to registry:', registry)
 
