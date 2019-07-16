@@ -7,7 +7,7 @@
 
 **HEAVILY** inspired by [np][npUrl] but with the following features:
 
-* Focus on [`yarn`][yarnUrl] (and [`lerna`][lernaUrl] in the future)
+* Focused on [`yarn`][yarnUrl] (and [`lerna`][lernaUrl] in the future)
 * A release branch workflow to help with GitHub master branch protections
 * Support for multiple (and external) registries
 
@@ -36,6 +36,17 @@
 yarn add @ianwalter/release --dev
 ```
 
+## CLI Usage
+
+```console
+yarn release [version]
+```
+
+* `--access, -a`
+* `--branch, -b`
+* `--yolo, -y`
+* `--logLevel, -l`
+
 ## Multiple Registries
 
 You can specify that your package be published to multiple registries by
@@ -56,6 +67,18 @@ configuring `release` in your package.json, for example:
 You can specify `npm` for npm and `github` for GitHub Package Registry.
 Otherwise, specify the registry URL.
 
+## Release Branch Workflow
+
+[GitHub branch protections][protectionsUrl] can make it difficult to commit
+version updates to your package.json before publishing. In order to get around
+this, you can specify the `--branch` flag and `release` will automatically
+create a release branch, commit the version update, and link to the pull request
+creation page on GitHub. It will then prompt you to confirm before publishing
+(unless you added the `--yolo` flag) so that you can get the PR reviewed. You
+can also supply a branch name to `--branch` if you don't want to use the
+generated one.
+
 [npUrl]: https://github.com/sindresorhus/np
 [yarnUrl]: https://yarnpkg.com/en/
 [lernaUrl]: https://lerna.js.org/
+[protectionUrl]: https://help.github.com/en/articles/about-protected-branches
