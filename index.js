@@ -145,7 +145,7 @@ const release = async ({ $package, ...config }) => {
     // If publishing to a non-npm registry, the registry URL needs to be
     // specified in the package.json's publishConfig field.
     if (registry !== 'npm') {
-      await updatePackage({ publishConfig: registry })
+      await updatePackage({ publishConfig: { registry } })
     }
 
     // Publish the package.
