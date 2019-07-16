@@ -1,6 +1,8 @@
 # @ianwalter/release
 > CLI workflow for releasing JavaScript packages
 
+[![npm page][npmImage]][npmUrl]
+
 ![Screenshot](screenshot.png)
 
 ## About
@@ -88,6 +90,8 @@ creation page on GitHub. It will then prompt you to confirm before publishing
 can also supply a branch name to `--branch` if you don't want to use the
 generated one.
 
+[npmImage]: https://img.shields.io/npm/v/@ianwalter/release.svg
+[npmUrl]: https://www.npmjs.com/package/@ianwalter/release
 [npUrl]: https://github.com/sindresorhus/np
 [yarnUrl]: https://yarnpkg.com/en/
 [lernaUrl]: https://lerna.js.org/
