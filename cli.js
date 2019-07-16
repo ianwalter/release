@@ -14,8 +14,8 @@ async function run () {
 
   // Warn the user about adding the access flag if this looks like it might be
   // the first time this package is being published.
-  const isVersionZero = $package.version === '0.0.0'
-  if (isVersionZero && !config.access) {
+  config.isVersionZero = $package.version === '0.0.0'
+  if (config.isVersionZero && !config.access) {
     print.warn(oneLine`
       If this is the first time publishing this package and you intend to make
       it publicly available on npm, make sure to add --access public
@@ -28,7 +28,7 @@ async function run () {
   }
 
   // Display the list of commits added since the last version was published.
-  if (isVersionZero) {
+  if (config.isVersionZero) {
     await execa('commits', ['100'], { stdio: 'inherit' })
   } else {
     await execa('commits', [`v${$package.version}`], { stdio: 'inherit' })

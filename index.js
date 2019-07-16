@@ -86,10 +86,13 @@ const release = async ({ $package, ...config }) => {
 
   // Get the markdown summary of the commits since the last release before the
   // version commit is created.
-  let markdown
+  let releaseBody = ''
   try {
-    const { stdout } = await commits(oldTag)
-    markdown = stdout
+    const { description, markdown } = await commits(oldTag)
+    if (!config.isVersionZero) {
+      releaseBody += `${description}\n\n`
+    }
+    releaseBody += markdown
   } catch (err) {
     print.debug('Error fetching commits:', err)
   }
@@ -166,7 +169,7 @@ const release = async ({ $package, ...config }) => {
   const releaseUrl = newGithubReleaseUrl({
     repoUrl,
     tag: newTag,
-    body: markdown,
+    body: releaseBody,
     isPrerelease: config.isPrerelease
   })
   print.debug('Release URL:', releaseUrl)
