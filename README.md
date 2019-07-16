@@ -91,4 +91,5 @@ generated one.
 [npUrl]: https://github.com/sindresorhus/np
 [yarnUrl]: https://yarnpkg.com/en/
 [lernaUrl]: https://lerna.js.org/
+[npmPublishUrl]: https://docs.npmjs.com/cli/publish
 [protectionsUrl]: https://help.github.com/en/articles/about-protected-branches
