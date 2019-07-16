@@ -5,7 +5,7 @@ const commits = require('@ianwalter/commits')
 const marked = require('marked')
 const TerminalRenderer = require('marked-terminal')
 const prompts = require('prompts')
-const writePackage = require('write-pkg')
+const updatePackage = require('@ianwalter/update-package')
 
 marked.setOptions({ renderer: new TerminalRenderer() })
 
@@ -95,12 +95,7 @@ const release = async ({ $package, ...config }) => {
   }
 
   // Update the package.json version.
-  const versionArgs = [
-    'version',
-    '--new-version',
-    config.version,
-    '--no-git-tag-version'
-  ]
+  const versionArgs = ['version', '--new-version', config.version]
   const { stdout: versionOutput } = await execa('yarn', versionArgs)
   print.debug('Version output:\n', versionOutput)
 
@@ -130,7 +125,7 @@ const release = async ({ $package, ...config }) => {
           message: 'Proceed with publishing?',
           initial: true
         },
-        { onCancel: () => process.exit(1) } // TODO: add rollback functionality.
+        { onCancel: () => process.exit(1) }
       )
     }
   }
@@ -152,7 +147,7 @@ const release = async ({ $package, ...config }) => {
     // If publishing to a non-npm registry, the registry URL needs to be
     // specified in the package.json's publishConfig field.
     if (registry !== 'npm') {
-      await writePackage({ publishConfig: registry })
+      await updatePackage({ publishConfig: registry })
     }
 
     // Publish the package.
