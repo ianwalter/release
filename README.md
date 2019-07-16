@@ -1,6 +1,8 @@
 # @ianwalter/release
 > CLI workflow for releasing JavaScript packages
 
+![Screenshot](screenshot.png)
+
 ## About
 
 **HEAVILY** inspired by [np][npUrl] but with the following features:
