@@ -140,7 +140,8 @@ const release = async ({ $package, ...config }) => {
 
   // Create and push the version tag to the remote if not publishing to the
   // GitHub Package Registry (since it creates a version tag automatically).
-  if (registries.indexOf('github') === -1) {
+  const hasGPR = registries.includes('github')
+  if (!hasGPR) {
     const { stdout: tagOutput } = await execa('git', ['tag', newTag])
     print.debug('Tag output:\n', tagOutput)
     const { stdout: pushTag } = await execa('git', ['push', 'origin', newTag])
@@ -178,7 +179,7 @@ const release = async ({ $package, ...config }) => {
   // Create the release on GitHub.
   const releaseUrl = newGithubReleaseUrl({
     repoUrl,
-    tag: newTag,
+    tag: hasGPR ? config.version : newTag,
     body: releaseBody,
     isPrerelease: config.isPrerelease
   })
