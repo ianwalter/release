@@ -91,7 +91,8 @@ const release = async ({ $package, ...config }) => {
   // version commit is created.
   let releaseBody = ''
   try {
-    const { description, markdown } = await commits(oldTag)
+    const start = oldTag === 'v0.0.0' ? undefined : oldTag
+    const { description, markdown } = await commits(start)
     if (!config.isVersionZero) {
       releaseBody += `${description.replace('HEAD', newTag)}:\n\n`
     }
