@@ -61,13 +61,13 @@ const release = async ({ $package, ...config }) => {
     await execa('yarn', ['--force'], stdio)
 
     // Run the lint script if it's defined in the project's package.json.
-    if ($package.scripts.lint) {
+    if ($package.scripts && $package.scripts.lint) {
       process.stdout.write('\n')
       await execa('yarn', ['lint'], stdio)
     }
 
     // Run the test script if it's defined in the project's package.json.
-    if ($package.scripts.test) {
+    if ($package.scripts && $package.scripts.test) {
       process.stdout.write('\n')
       await execa('yarn', ['test'], stdio)
     }
