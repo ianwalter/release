@@ -43,7 +43,7 @@ const release = async ({ $package, ...config }) => {
   const { registries = ['npm'] } = config
 
   // Check if there is already a local tag for the new version.
-  const { stdout: localTag } = await execa('git', ['tags', newTag])
+  const { stdout: localTag } = await execa('git', ['tag', '-l', newTag])
   if (localTag !== '') {
     throw new Error(`Local tag for ${newTag} already exists!`)
   }
