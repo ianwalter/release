@@ -1,7 +1,7 @@
 {
   "name": "@ianwalter/release",
   "description": "CLI workflow for releasing JavaScript packages",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "author": "Ian Walter <public@iankwalter.com> (https://iankwalter.com)",
   "license": "SEE LICENSE IN LICENSE",
   "bin": {
