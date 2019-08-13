@@ -19,9 +19,9 @@ async function run () {
       {
         type: 'select',
         name: 'access',
-        message: `
-          If this is the first time publishing this package and you intend to
-          make it publicly available on npm, select the access level or skip
+        message: oneLine`
+          If you are publishing this package to npm for the first time, select
+          the access level, otherwise select skip:
         `,
         choices: [
           {
@@ -88,7 +88,7 @@ async function run () {
       {
         type: 'select',
         name: 'version',
-        message: 'Select the semantic version to publish',
+        message: 'Select the semantic version to publish:',
         choices: [
           {
             title: `Patch\t${patch}`,
