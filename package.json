@@ -38,7 +38,7 @@
     "marked-terminal": "^3.3.0",
     "new-github-release-url": "^1.0.0",
     "prompts": "^2.2.1",
-    "semver": "^6.2.0"
+    "semver": "^6.3.0"
   },
   "devDependencies": {
     "@ianwalter/bff": "^6.4.0",
