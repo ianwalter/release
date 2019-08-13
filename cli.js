@@ -14,12 +14,33 @@ async function run () {
 
   // Warn the user about adding the access flag if this looks like it might be
   // the first time this package is being published.
-  config.isVersionZero = $package.version === '0.0.0'
-  if (config.isVersionZero && !config.access) {
-    print.warn(oneLine`
-      If this is the first time publishing this package and you intend to make
-      it publicly available on npm, make sure to add --access public
-    `)
+  if ($package.version === '0.0.0') {
+    const { access } = await prompts(
+      {
+        type: 'select',
+        name: 'access',
+        message: `
+          If this is the first time publishing this package and you intend to
+          make it publicly available on npm, select the access level or skip
+        `,
+        choices: [
+          {
+            title: 'Public',
+            value: { access: 'public' }
+          },
+          {
+            title: 'Private',
+            value: { access: 'private' }
+          },
+          {
+            title: 'Skip',
+            value: { access: null }
+          }
+        ]
+      },
+      { onCancel: () => process.exit(1) }
+    )
+    config.access = access
   }
 
   if (!config.yolo) {
@@ -49,7 +70,7 @@ async function run () {
       config.version = version
     } else {
       print.error(oneLine`
-        The specified version <${version}> is not a valid semantic version
+        The specified version \`${version}\` is not a valid semantic version
       `)
     }
     delete config._
