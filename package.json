@@ -35,7 +35,7 @@
     "common-tags": "^1.8.0",
     "execa": "^2.0.3",
     "marked": "^0.7.0",
-    "marked-terminal": "^3.2.0",
+    "marked-terminal": "^3.3.0",
     "new-github-release-url": "^1.0.0",
     "prompts": "^2.2.1",
     "semver": "^6.2.0"
