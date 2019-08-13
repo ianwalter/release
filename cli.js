@@ -42,14 +42,13 @@ async function run () {
     if (semver.valid(version)) {
       if (semver.lt(version, $package.version)) {
         print.warn(oneLine`
-          The specified version <${version}> needs to be higher than the current
-          version <${$package.version}>
+          The specified version \`${version}\` is lower than the current
+          version \`${$package.version}>\`
         `)
-      } else {
-        config.version = version
       }
+      config.version = version
     } else {
-      print.warn(oneLine`
+      print.error(oneLine`
         The specified version <${version}> is not a valid semantic version
       `)
     }
