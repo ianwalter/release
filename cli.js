@@ -2,13 +2,17 @@
 
 const cli = require('@ianwalter/cli')
 const execa = require('execa')
-const { print } = require('@ianwalter/print')
+const { print, md } = require('@ianwalter/print')
 const prompts = require('prompts')
 const semver = require('semver')
 const { oneLine } = require('common-tags')
 const latestVersion = require('latest-version')
+const marked = require('marked')
+const TerminalRenderer = require('marked-terminal')
 const pkg = require('./package.json')
 const { precheck, release } = require('.')
+
+marked.setOptions({ renderer: new TerminalRenderer() })
 
 async function run () {
   // Build the config.
@@ -17,11 +21,16 @@ async function run () {
   // Display a warning message if the current release version is outdated.
   const latestReleaseVersion = await latestVersion('@ianwalter/release')
   if (semver.lt(pkg.version, latestReleaseVersion)) {
-    print.warn(oneLine`
-      The version of @ianwalter/release being used (\`${pkg.version}\`) is
-      outdated, you should probably update to \`${latestReleaseVersion}\` before
-      continuing to publish.
-    `)
+    process.stdout.write('\n')
+    print.warn(
+      'Warning!',
+      md(oneLine`
+        **The version of @ianwalter/release being used (\`${pkg.version}\`) is
+        outdated, you should probably update to \`${latestReleaseVersion}\`
+        before continuing to publish.**
+      `)
+    )
+    process.stdout.write('\n')
   }
 
   // Warn the user about adding the access flag if this looks like it might be
