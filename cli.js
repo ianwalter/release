@@ -6,11 +6,23 @@ const { print } = require('@ianwalter/print')
 const prompts = require('prompts')
 const semver = require('semver')
 const { oneLine } = require('common-tags')
+const latestVersion = require('latest-version')
+const pkg = require('./package.json')
 const { precheck, release } = require('.')
 
 async function run () {
   // Build the config.
   const { $package, ...config } = cli({ name: 'release' })
+
+  // Display a warning message if the current release version is outdated.
+  const latestReleaseVersion = await latestVersion('@ianwalter/release')
+  if (semver.lt(pkg.version, latestReleaseVersion)) {
+    print.warn(oneLine`
+      The version of @ianwalter/release being used (\`${pkg.version}\`) is
+      outdated, you should probably update to \`${latestReleaseVersion}\` before
+      continuing to publish.
+    `)
+  }
 
   // Warn the user about adding the access flag if this looks like it might be
   // the first time this package is being published.
