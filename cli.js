@@ -47,15 +47,15 @@ async function run () {
         choices: [
           {
             title: 'Public',
-            value: { access: 'public' }
+            value: 'public'
           },
           {
             title: 'Private',
-            value: { access: 'private' }
+            value: 'private'
           },
           {
             title: 'Skip',
-            value: { access: null }
+            value: null
           }
         ]
       },
