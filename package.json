@@ -33,7 +33,7 @@
     "@ianwalter/print": "^3.2.0",
     "@ianwalter/update-package": "^0.0.2",
     "common-tags": "^1.8.0",
-    "execa": "^2.0.3",
+    "execa": "^2.0.4",
     "latest-version": "^5.1.0",
     "marked": "^0.7.0",
     "marked-terminal": "^3.3.0",
@@ -43,8 +43,8 @@
   },
   "devDependencies": {
     "@ianwalter/bff": "^6.4.0",
-    "@ianwalter/eslint-config": "^2.2.0",
-    "@ianwalter/renovate-config": "^1.1.1"
+    "@ianwalter/eslint-config": "^2.4.0",
+    "@ianwalter/renovate-config": "^1.2.0"
   },
   "renovate": {
     "extends": [
