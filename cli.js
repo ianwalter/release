@@ -73,7 +73,7 @@ async function run () {
   if (config.isVersionZero) {
     await execa('commits', ['100'], { stdio: 'inherit' })
   } else {
-    await execa('commits', [`v${$package.version}`], { stdio: 'inherit' })
+    await execa('commits', [$package.version], { stdio: 'inherit' })
   }
   process.stdout.write('\n')
 
@@ -81,7 +81,7 @@ async function run () {
   // new version number.
   if (config._.length) {
     const version = config._[0]
-    if (semver.valid(version)) {
+    if (semver.valid(version) && version[0] !== 'v') {
       if (semver.lt(version, $package.version)) {
         print.warn(oneLine`
           The specified version \`${version}\` is lower than the current

@@ -36,24 +36,20 @@ const precheck = async (config) => {
 const release = async ({ $package, ...config }) => {
   const print = new Print({ level: config.logLevel || 'info' })
 
-  // Create the tag string from the configured version.
-  const oldTag = `v${$package.version}`
-  const newTag = `v${config.version}`
-
   // Destructure and add defaults to config properties.
   const { registries = ['npm'] } = config
 
   // Check if there is already a local tag for the new version.
-  const { stdout: localTag } = await execa('git', ['tag', '-l', newTag])
+  const { stdout: localTag } = await execa('git', ['tag', '-l', config.version])
   if (localTag !== '') {
-    throw new Error(`Local tag for ${newTag} already exists!`)
+    throw new Error(`Local tag for ${config.version} already exists!`)
   }
 
   // Check if there is already a remote tag for the new version.
-  const ref = `refs/tags/${newTag}`
+  const ref = `refs/tags/${config.version}`
   const { stdout: remoteTag } = await execa('git', ['ls-remote', 'origin', ref])
   if (remoteTag !== '') {
-    throw new Error(`Remote tag for ${newTag} already exists!`)
+    throw new Error(`Remote tag for ${config.version} already exists!`)
   }
 
   if (!config.yolo) {
@@ -81,7 +77,7 @@ const release = async ({ $package, ...config }) => {
     // generate one.
     config.branch = typeof config.branch === 'string'
       ? config.branch
-      : `release-${newTag}`
+      : `release-${config.version}`
 
     // Checkout the release branch.
     process.stdout.write('\n')
@@ -92,10 +88,10 @@ const release = async ({ $package, ...config }) => {
   // version commit is created.
   let releaseBody = ''
   try {
-    const start = oldTag === 'v0.0.0' ? undefined : oldTag
+    const start = $package.version === '0.0.0' ? undefined : $package.version
     const { description, markdown } = await commits(start)
     if (!config.isVersionZero) {
-      releaseBody += `${description.replace('HEAD', newTag)}:\n\n`
+      releaseBody += `${description.replace('HEAD', config.version)}:\n\n`
     }
     releaseBody += markdown
   } catch (err) {
@@ -106,8 +102,8 @@ const release = async ({ $package, ...config }) => {
   await updatePackage({ version: config.version })
   const { stdout: addOutput } = await execa('git', ['add', 'package.json'])
   print.debug('Version add output:\n', addOutput)
-  const { stdout: commitOutput } = await execa('git', ['commit', '-m', newTag])
-  print.debug('Version commit output:\n', commitOutput)
+  const { stdout } = await execa('git', ['commit', '-m', config.version])
+  print.debug('Version commit output:\n', stdout)
 
   // Push the version commit upstream.
   const { stdout: pushOutput } = await execa('git', ['push', '-u'])
@@ -140,12 +136,20 @@ const release = async ({ $package, ...config }) => {
     }
   }
 
-  // Create and push the version tag to the remote.
-  const { stdout: tagOutput } = await execa('git', ['tag', newTag], stdio)
-  print.debug('Tag output:\n', tagOutput)
-  const pushArgs = ['push', 'origin', newTag]
-  const { stdout: pushTag } = await execa('git', pushArgs, stdio)
-  print.debug('Push tag output:\n', pushTag)
+  // Create and push the version tag to the remote if not publishing to the
+  // GitHub Package Registry (since it creates a version tag automatically).
+  const hasGpr = registries.includes('github') || (
+    $package.publishConfig &&
+    $package.publishConfig.registry &&
+    $package.publishConfig.registry === gprUrl
+  )
+  if (!hasGpr) {
+    const { stdout } = await execa('git', ['tag', config.version], stdio)
+    print.debug('Tag output:\n', stdout)
+    const pushArgs = ['push', 'origin', config.version]
+    const { stdout: pushTag } = await execa('git', pushArgs, stdio)
+    print.debug('Push tag output:\n', pushTag)
+  }
 
   // Iterate over configured registries.
   for (let registry of registries) {
@@ -176,14 +180,9 @@ const release = async ({ $package, ...config }) => {
   }
 
   // Create the release on GitHub.
-  const hasGpr = registries.includes('github') || (
-    $package.publishConfig &&
-    $package.publishConfig.registry &&
-    $package.publishConfig.registry === gprUrl
-  )
   const releaseUrl = newGithubReleaseUrl({
     repoUrl,
-    tag: hasGpr ? config.version : newTag,
+    tag: config.version,
     body: releaseBody,
     isPrerelease: config.isPrerelease
   })
@@ -192,7 +191,7 @@ const release = async ({ $package, ...config }) => {
   // Print a success message letting the user know their package version has
   // be published.
   process.stdout.write('\n')
-  print.success(`Published ${$package.name} ${newTag}!`)
+  print.success(`Published ${$package.name} ${config.version}!`)
 
   // Display the link to create a GitHub release.
   const releaseLink = `[Create a GitHub release for this tag!](${releaseUrl})`
