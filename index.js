@@ -140,20 +140,12 @@ const release = async ({ $package, ...config }) => {
     }
   }
 
-  // Create and push the version tag to the remote if not publishing to the
-  // GitHub Package Registry (since it creates a version tag automatically).
-  const hasGpr = registries.includes('github') || (
-    $package.publishConfig &&
-    $package.publishConfig.registry &&
-    $package.publishConfig.registry === gprUrl
-  )
-  if (!hasGpr) {
-    const { stdout: tagOutput } = await execa('git', ['tag', newTag], stdio)
-    print.debug('Tag output:\n', tagOutput)
-    const pushArgs = ['push', 'origin', newTag]
-    const { stdout: pushTag } = await execa('git', pushArgs, stdio)
-    print.debug('Push tag output:\n', pushTag)
-  }
+  // Create and push the version tag to the remote.
+  const { stdout: tagOutput } = await execa('git', ['tag', newTag], stdio)
+  print.debug('Tag output:\n', tagOutput)
+  const pushArgs = ['push', 'origin', newTag]
+  const { stdout: pushTag } = await execa('git', pushArgs, stdio)
+  print.debug('Push tag output:\n', pushTag)
 
   // Iterate over configured registries.
   for (let registry of registries) {
@@ -184,6 +176,11 @@ const release = async ({ $package, ...config }) => {
   }
 
   // Create the release on GitHub.
+  const hasGpr = registries.includes('github') || (
+    $package.publishConfig &&
+    $package.publishConfig.registry &&
+    $package.publishConfig.registry === gprUrl
+  )
   const releaseUrl = newGithubReleaseUrl({
     repoUrl,
     tag: hasGpr ? config.version : newTag,

@@ -2,6 +2,7 @@
 > CLI workflow for releasing JavaScript packages
 
 [![npm page][npmImage]][npmUrl]
+[![CI][ciImage]][ciUrl]
 
 ![Screenshot](screenshot.png)
 
@@ -92,6 +93,8 @@ generated one.
 
 [npmImage]: https://img.shields.io/npm/v/@ianwalter/release.svg
 [npmUrl]: https://www.npmjs.com/package/@ianwalter/release
+[ciImage]: https://github.com/ianwalter/release/workflows/CI/badge.svg
+[ciUrl]: https://github.com/ianwalter/release/actions
 [npUrl]: https://github.com/sindresorhus/np
 [yarnUrl]: https://yarnpkg.com/en/
 [lernaUrl]: https://lerna.js.org/
