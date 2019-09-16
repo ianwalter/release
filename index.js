@@ -30,9 +30,10 @@ const precheck = async (config) => {
   const remoteOptions = ['ls-remote', 'origin', 'HEAD']
   const { stdout: remoteHead } = await execa('git', remoteOptions)
   const [remoteRef] = remoteHead.split('\t')
-  const { stdout: localRef } = await execa('git', ['rev-parse', 'HEAD'])
-  if (remoteRef !== localRef) {
-    print.debug('Remote changes check:', remoteRef, localRef)
+  try {
+    await execa('git', ['merge-base', '--is-ancestor', remoteRef, 'HEAD'])
+  } catch (err) {
+    print.debug('Unfetched changes check:', remoteRef)
     throw new Error('Unfetched changes!')
   }
 }
