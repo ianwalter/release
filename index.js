@@ -35,7 +35,7 @@ const precheck = async (config) => {
   // Check if there are changes that need to be pulled from the remote (that
   // aren't known about locally).
   const fetchOptions = ['fetch', 'origin', 'master', '--dry-run']
-  const { stdout: fetchResult } = await execa('git', fetchOptions)
+  const { stderr: fetchResult } = await execa('git', fetchOptions)
   if (fetchResult !== '') {
     print.debug('Remote fetch check:\n', fetchResult)
     throw new Error('Origin has changes!')
