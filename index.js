@@ -6,6 +6,7 @@ const marked = require('marked')
 const TerminalRenderer = require('marked-terminal')
 const prompts = require('prompts')
 const updatePackage = require('@ianwalter/update-package')
+const { oneLine } = require('common-tags')
 
 marked.setOptions({ renderer: new TerminalRenderer() })
 
@@ -25,20 +26,14 @@ const precheck = async (config) => {
     throw new Error('Uncommited changes!')
   }
 
-  // Check if the upstream branch has commits that the local one doesn't.
-  const { stdout: upstreamStatus } = await execa('git', ['rev-list', '..@{u}'])
-  if (upstreamStatus !== '') {
-    print.debug('Upstream changes check:\n', upstreamStatus)
-    throw new Error('Upstream has changes!')
-  }
-
-  // Check if there are changes that need to be pulled from the remote (that
-  // aren't known about locally).
-  const fetchOptions = ['fetch', 'origin', 'master', '--dry-run', '-q']
-  const { stderr: fetchResult } = await execa('git', fetchOptions)
-  if (fetchResult !== '') {
-    print.debug('Remote fetch check:\n', fetchResult)
-    throw new Error('Origin has changes!')
+  // Check if there are unfetched changes in the remote repository.
+  const remoteOptions = ['ls-remote', 'origin', 'HEAD']
+  const { stdout: remoteHead } = await execa('git', remoteOptions)
+  const [remoteRef] = remoteHead.split('\t')
+  const { stdout: localRef } = await execa('git', ['rev-parse', 'HEAD'])
+  if (remoteRef !== localRef) {
+    print.debug('Remote changes check:', remoteRef, localRef)
+    throw new Error('Unfetched changes!')
   }
 }
 
