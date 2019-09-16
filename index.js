@@ -6,7 +6,6 @@ const marked = require('marked')
 const TerminalRenderer = require('marked-terminal')
 const prompts = require('prompts')
 const updatePackage = require('@ianwalter/update-package')
-const { oneLine } = require('common-tags')
 
 marked.setOptions({ renderer: new TerminalRenderer() })
 
