@@ -31,6 +31,15 @@ const precheck = async (config) => {
     print.debug('Upstream changes check:\n', upstreamStatus)
     throw new Error('Upstream has changes!')
   }
+
+  // Check if there are changes that need to be pulled from the remote (that
+  // aren't known about locally).
+  const fetchOptions = ['fetch', 'origin', 'master', '--dry-run']
+  const { stdout: fetchResult } = await execa('git', fetchOptions)
+  if (fetchResult !== '') {
+    print.debug('Remote fetch check:\n', fetchResult)
+    throw new Error('Origin has changes!')
+  }
 }
 
 const release = async ({ $package, ...config }) => {
