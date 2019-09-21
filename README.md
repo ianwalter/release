@@ -91,6 +91,14 @@ creation page on GitHub. It will then prompt you to confirm before publishing
 can also supply a branch name to `--branch` if you don't want to use the
 generated one.
 
+## License
+
+Apache 2.0 with Commons Clause - See [LICENSE][licenseUrl]
+
+&nbsp;
+
+Created by [Ian Walter](https://iankwalter.com)
+
 [npmImage]: https://img.shields.io/npm/v/@ianwalter/release.svg
 [npmUrl]: https://www.npmjs.com/package/@ianwalter/release
 [ciImage]: https://github.com/ianwalter/release/workflows/CI/badge.svg
@@ -100,3 +108,4 @@ generated one.
 [lernaUrl]: https://lerna.js.org/
 [npmPublishUrl]: https://docs.npmjs.com/cli/publish
 [protectionsUrl]: https://help.github.com/en/articles/about-protected-branches
+[licenseUrl]: https://github.com/ianwalter/release/blob/master/LICENSE
