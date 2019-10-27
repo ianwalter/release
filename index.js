@@ -1,13 +1,9 @@
-const { Print } = require('@ianwalter/print')
+const { Print, md } = require('@ianwalter/print')
 const execa = require('execa')
 const newGithubReleaseUrl = require('new-github-release-url')
 const commits = require('@ianwalter/commits')
-const marked = require('marked')
-const TerminalRenderer = require('marked-terminal')
 const prompts = require('prompts')
 const updatePackage = require('@ianwalter/update-package')
-
-marked.setOptions({ renderer: new TerminalRenderer() })
 
 const stdio = { stdio: 'inherit' }
 const gprUrl = 'https://npm.pkg.github.com/'
@@ -126,7 +122,7 @@ const release = async ({ $package, ...config }) => {
     // Display the link to create a pull request for the release branch.
     const prUrl = `${repoUrl}/compare/master...${config.branch}`
     const prLink = `[Create a pull request for this release!](${prUrl})`
-    print.log('🔗', marked(prLink).trimEnd() + '\n')
+    print.log('🔗', md(prLink), '\n')
 
     if (!config.yolo) {
       await prompts(
@@ -199,7 +195,7 @@ const release = async ({ $package, ...config }) => {
 
   // Display the link to create a GitHub release.
   const releaseLink = `[Create a GitHub release for this tag!](${releaseUrl})`
-  print.log('🔗', marked(releaseLink).trimEnd() + '\n')
+  print.log('🔗', md(releaseLink), '\n')
 }
 
 module.exports = { precheck, release }

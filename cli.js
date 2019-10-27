@@ -7,12 +7,8 @@ const prompts = require('prompts')
 const semver = require('semver')
 const { oneLine } = require('common-tags')
 const latestVersion = require('latest-version')
-const marked = require('marked')
-const TerminalRenderer = require('marked-terminal')
 const pkg = require('./package.json')
 const { precheck, release } = require('.')
-
-marked.setOptions({ renderer: new TerminalRenderer() })
 
 async function run () {
   // Build the config.
@@ -35,7 +31,8 @@ async function run () {
 
   // Warn the user about adding the access flag if this looks like it might be
   // the first time this package is being published.
-  if ($package.version === '0.0.0') {
+  config.isVersionZero = $package.version === '0.0.0'
+  if (config.isVersionZero) {
     const { access } = await prompts(
       {
         type: 'select',
