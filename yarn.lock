@@ -146,10 +146,10 @@
     marked "^0.7.0"
     marked-terminal "^3.3.0"
 
-"@ianwalter/print@^3.7.0":
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-3.7.0.tgz#39bd30ac3f7dc63a39ffa5ed274c2b88b115c77d"
-  integrity sha512-kDjvCY4ymR+Qy8JspF5Onl0vwBJvkrxu0EPjD1jxaVnEfgY3ZDZRRVEHGgOUvuJG7BCheXTKP6b8Kbc1LKYm1A==
+"@ianwalter/print@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-3.8.0.tgz#5367d285a65ff26a61ef15a3b2ac3e2aa7cfcd73"
+  integrity sha512-UMpYt+Z3qA20UvBLDBmRbfYXpWz/MrpWcyWIPErjw2pu9TNFxu0eCg1UcKB9hbjOlOHbTaFpGLc+BNsUa/fOAw==
   dependencies:
     "@ianwalter/chromafi" "^1.0.1"
     "@ianwalter/clone" "^4.1.0"
