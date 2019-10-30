@@ -2,8 +2,11 @@
   "name": "@ianwalter/release",
   "description": "CLI workflow for releasing JavaScript packages",
   "version": "3.0.5",
-  "author": "Ian Walter <public@iankwalter.com> (https://iankwalter.com)",
   "license": "SEE LICENSE IN LICENSE",
+  "author": {
+    "name": "Ian Walter",
+    "url": "https://ianwalter.dev"
+  },
   "bin": {
     "release": "cli.js"
   },
