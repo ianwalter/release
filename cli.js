@@ -12,7 +12,22 @@ const { precheck, release } = require('.')
 
 async function run () {
   // Build the config.
-  const { $package, ...config } = cli({ name: 'release' })
+  const { $package, ...config } = cli({
+    name: 'release',
+    usage: 'release [options]',
+    options: {
+      version: {
+        alias: 'v'
+      },
+      branch: {
+        alias: 'b'
+      },
+      logLevel: {
+        alias: 'l',
+        default: 'info'
+      }
+    }
+  })
 
   // Display a warning message if the current release version is outdated.
   const latestReleaseVersion = await latestVersion('@ianwalter/release')

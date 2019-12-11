@@ -8,7 +8,7 @@ const updatePackage = require('@ianwalter/update-package')
 const stdio = { stdio: 'inherit' }
 const gprUrl = 'https://npm.pkg.github.com/'
 
-const precheck = async (config) => {
+const precheck = async config => {
   const print = new Print({ level: config.logLevel || 'info' })
 
   // Checkout master.
