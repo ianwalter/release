@@ -36,7 +36,7 @@
     "@ianwalter/print": "^3.9.0",
     "@ianwalter/update-package": "^0.0.2",
     "common-tags": "^1.8.0",
-    "execa": "^3.2.0",
+    "execa": "^3.4.0",
     "latest-version": "^5.1.0",
     "new-github-release-url": "^1.0.0",
     "prompts": "^2.3.0",
