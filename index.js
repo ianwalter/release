@@ -33,7 +33,7 @@ const precheck = async config => {
   }
 }
 
-const release = async ({ $package, ...config }) => {
+const release = async ({ packageJson, ...config }) => {
   const print = new Print({ level: config.logLevel || 'info' })
 
   // Destructure and add defaults to config properties.
@@ -58,13 +58,13 @@ const release = async ({ $package, ...config }) => {
     await execa('yarn', ['--force'], stdio)
 
     // Run the lint script if it's defined in the project's package.json.
-    if ($package.scripts && $package.scripts.lint) {
+    if (packageJson.scripts && packageJson.scripts.lint) {
       process.stdout.write('\n')
       await execa('yarn', ['lint'], stdio)
     }
 
     // Run the test script if it's defined in the project's package.json.
-    if ($package.scripts && $package.scripts.test) {
+    if (packageJson.scripts && packageJson.scripts.test) {
       process.stdout.write('\n')
       await execa('yarn', ['test'], stdio)
     }
@@ -88,7 +88,9 @@ const release = async ({ $package, ...config }) => {
   // version commit is created.
   let releaseBody = ''
   try {
-    const start = $package.version === '0.0.0' ? undefined : $package.version
+    const start = packageJson.version === '0.0.0'
+      ? undefined
+      : packageJson.version
     const { description, markdown } = await commits(start)
     if (!config.isVersionZero) {
       releaseBody += `${description.replace('HEAD', config.version)}:\n\n`
@@ -139,9 +141,9 @@ const release = async ({ $package, ...config }) => {
   // Create and push the version tag to the remote if not publishing to the
   // GitHub Package Registry (since it creates a version tag automatically).
   const hasGpr = registries.includes('github') || (
-    $package.publishConfig &&
-    $package.publishConfig.registry &&
-    $package.publishConfig.registry === gprUrl
+    packageJson.publishConfig &&
+    packageJson.publishConfig.registry &&
+    packageJson.publishConfig.registry === gprUrl
   )
   if (!hasGpr) {
     const { stdout } = await execa('git', ['tag', config.version], stdio)
@@ -191,7 +193,7 @@ const release = async ({ $package, ...config }) => {
   // Print a success message letting the user know their package version has
   // be published.
   process.stdout.write('\n')
-  print.success(`Published ${$package.name} ${config.version}!`)
+  print.success(`Published ${packageJson.name} ${config.version}!`)
 
   // Display the link to create a GitHub release.
   const releaseLink = `[Create a GitHub release for this tag!](${releaseUrl})`

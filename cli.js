@@ -12,7 +12,7 @@ const { precheck, release } = require('.')
 
 async function run () {
   // Build the config.
-  const { $package, ...config } = cli({
+  const { packageJson, ...config } = cli({
     name: 'release',
     usage: 'release [options]',
     options: {
@@ -46,7 +46,7 @@ async function run () {
 
   // Warn the user about adding the access flag if this looks like it might be
   // the first time this package is being published.
-  config.isVersionZero = $package.version === '0.0.0'
+  config.isVersionZero = packageJson.version === '0.0.0'
   if (config.isVersionZero) {
     const { access } = await prompts(
       {
@@ -85,7 +85,7 @@ async function run () {
   if (config.isVersionZero) {
     await execa('commits', ['100'], { stdio: 'inherit' })
   } else {
-    await execa('commits', [$package.version], { stdio: 'inherit' })
+    await execa('commits', [packageJson.version], { stdio: 'inherit' })
   }
   process.stdout.write('\n')
 
@@ -94,10 +94,10 @@ async function run () {
   if (config._.length) {
     const version = config._[0]
     if (semver.valid(version) && version[0] !== 'v') {
-      if (semver.lt(version, $package.version)) {
+      if (semver.lt(version, packageJson.version)) {
         print.warn(oneLine`
           The specified version \`${version}\` is lower than the current
-          version \`${$package.version}>\`
+          version \`${packageJson.version}>\`
         `)
       }
       config.version = version
@@ -110,12 +110,12 @@ async function run () {
   }
 
   if (!config.version) {
-    const patch = semver.inc($package.version, 'patch')
-    const minor = semver.inc($package.version, 'minor')
-    const major = semver.inc($package.version, 'major')
-    const prePatch = semver.inc($package.version, 'prepatch')
-    const preMinor = semver.inc($package.version, 'preminor')
-    const preMajor = semver.inc($package.version, 'premajor')
+    const patch = semver.inc(packageJson.version, 'patch')
+    const minor = semver.inc(packageJson.version, 'minor')
+    const major = semver.inc(packageJson.version, 'major')
+    const prePatch = semver.inc(packageJson.version, 'prepatch')
+    const preMinor = semver.inc(packageJson.version, 'preminor')
+    const preMajor = semver.inc(packageJson.version, 'premajor')
 
     const { version } = await prompts(
       {
@@ -159,7 +159,7 @@ async function run () {
     process.stdout.write('\n')
   }
 
-  await release({ $package, ...config })
+  await release({ packageJson, ...config })
 }
 
 run().catch(err => print.error(err))
