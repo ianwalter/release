@@ -40,10 +40,10 @@ async function run () {
         before continuing to publish.**
       `)
     )
-    process.stdout.write('\n')
   }
 
   // Display the list of commits added since the last version was published.
+  process.stdout.write('\n')
   config.isVersionZero = config.version === '0.0.0'
   if (config.isVersionZero) {
     await execa('commits', ['100'], { stdio: 'inherit' })
