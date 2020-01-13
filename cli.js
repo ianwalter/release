@@ -44,12 +44,12 @@ async function run () {
   }
 
   // Display the list of commits added since the last version was published.
+  config.isVersionZero = config.version === '0.0.0'
   if (config.isVersionZero) {
     await execa('commits', ['100'], { stdio: 'inherit' })
   } else {
     await execa('commits', [packageJson.version], { stdio: 'inherit' })
   }
-  process.stdout.write('\n')
 
   // If there was an argument passed to the command, attempt to use it as the
   // new version number.
