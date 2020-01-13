@@ -77,7 +77,7 @@ async function run () {
 run().catch(err => {
   print.error(err)
   const output = err.output || err.stdout || err.stderr
-  if (err.output) {
+  if (output) {
     print.debug('Output', output)
   }
 })
