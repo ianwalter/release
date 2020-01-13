@@ -33,7 +33,7 @@
   "dependencies": {
     "@ianwalter/cli": "^3.0.0",
     "@ianwalter/commits": "^1.0.1",
-    "@ianwalter/print": "^4.0.1",
+    "@ianwalter/print": "^4.0.2",
     "@ianwalter/update-package": "^0.0.2",
     "common-tags": "^1.8.0",
     "execa": "^4.0.0",
