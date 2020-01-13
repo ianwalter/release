@@ -1,5 +1,11 @@
 const { getVersion, getAccess } = require('./lib/prompts')
 const { changesChecks, tagsChecks, release } = require('./lib/release')
+const {
+  UncommitedChangesError,
+  RemoteChangesError,
+  LocalTagExistsError,
+  RemoteTagExistsError
+} = require('./lib/errors')
 
 module.exports = {
   getVersion,
@@ -7,5 +13,10 @@ module.exports = {
 
   changesChecks,
   tagsChecks,
-  release
+  release,
+
+  UncommitedChangesError,
+  RemoteChangesError,
+  LocalTagExistsError,
+  RemoteTagExistsError
 }

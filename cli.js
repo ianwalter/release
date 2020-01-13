@@ -3,9 +3,9 @@
 const cli = require('@ianwalter/cli')
 const execa = require('execa')
 const { print, md } = require('@ianwalter/print')
+const semver = require('semver')
 const { oneLine } = require('common-tags')
 const latestVersion = require('latest-version')
-const semver = require('semver')
 const pkg = require('./package.json')
 const { release } = require('.')
 
@@ -76,7 +76,8 @@ async function run () {
 
 run().catch(err => {
   print.error(err)
+  const output = err.output || err.stdout || err.stderr
   if (err.output) {
-    print.debug('Output', err.output)
+    print.debug('Output', output)
   }
 })
