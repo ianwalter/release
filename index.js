@@ -4,53 +4,37 @@ const newGithubReleaseUrl = require('new-github-release-url')
 const commits = require('@ianwalter/commits')
 const prompts = require('prompts')
 const updatePackage = require('@ianwalter/update-package')
+const {
+  uncommittedChangesCheck,
+  remoteChangesCheck,
+  localTagCheck,
+  remoteTagCheck
+} = require('./lib/checks')
 
 const stdio = { stdio: 'inherit' }
 const gprUrl = 'https://npm.pkg.github.com/'
 
-const precheck = async config => {
-  const print = new Print({ level: config.logLevel || 'info' })
-
+async function precheck () {
   // Checkout master.
   await execa('git', ['checkout', 'master'])
 
-  // Check if there are uncommited changes in the current working directory.
-  const { stdout: status } = await execa('git', ['status', '-s'])
-  if (status !== '') {
-    print.debug('Uncommited changes check:\n', status)
-    throw new Error('Uncommited changes!')
-  }
+  await uncommittedChangesCheck()
 
-  // Check if there are unfetched changes in the remote repository.
-  const remoteOptions = ['ls-remote', 'origin', 'HEAD']
-  const { stdout: remoteHead } = await execa('git', remoteOptions)
-  const [remoteRef] = remoteHead.split('\t')
-  try {
-    await execa('git', ['merge-base', '--is-ancestor', remoteRef, 'HEAD'])
-  } catch (err) {
-    print.debug('Unfetched changes check:', remoteRef)
-    throw new Error('Unfetched changes!')
-  }
+  await remoteChangesCheck()
 }
 
-const release = async ({ packageJson, ...config }) => {
+async function release ({ packageJson, ...config }) {
   const print = new Print({ level: config.logLevel || 'info' })
 
   // Destructure and add defaults to config properties.
-  const { registries = ['npm'] } = config
+  const {
+    registries = ['npm'],
+    test = 'test'
+  } = config
 
-  // Check if there is already a local tag for the new version.
-  const { stdout: localTag } = await execa('git', ['tag', '-l', config.version])
-  if (localTag !== '') {
-    throw new Error(`Local tag for ${config.version} already exists!`)
-  }
+  await localTagCheck(config.version)
 
-  // Check if there is already a remote tag for the new version.
-  const ref = `refs/tags/${config.version}`
-  const { stdout: remoteTag } = await execa('git', ['ls-remote', 'origin', ref])
-  if (remoteTag !== '') {
-    throw new Error(`Remote tag for ${config.version} already exists!`)
-  }
+  await remoteTagCheck(config.version)
 
   if (!config.yolo) {
     // Re-install node modules using yarn.
@@ -66,7 +50,7 @@ const release = async ({ packageJson, ...config }) => {
     // Run the test script if it's defined in the project's package.json.
     if (packageJson.scripts && packageJson.scripts.test) {
       process.stdout.write('\n')
-      await execa('yarn', ['test'], stdio)
+      await execa('yarn', [test], stdio)
     }
   }
 
