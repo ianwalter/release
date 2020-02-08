@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@ianwalter/base-error": "^6.1.0",
-    "@ianwalter/cli": "^3.0.0",
+    "@ianwalter/cli": "^4.1.0",
     "@ianwalter/commits": "^1.0.1",
     "@ianwalter/print": "^5.1.0",
     "@ianwalter/update-package": "^0.0.2",
