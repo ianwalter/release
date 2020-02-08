@@ -10,7 +10,7 @@
 
 **HEAVILY** inspired by [np][npUrl] but with the following features:
 
-* Focused on [`yarn`][yarnUrl] (and [`lerna`][lernaUrl] in the future)
+* Better support for [`yarn`][yarnUrl]
 * A release branch workflow to help with GitHub master branch protections
 * Support for multiple (and external) registries
 
@@ -105,7 +105,6 @@ Created by [Ian Walter](https://ianwalter.dev)
 [ciUrl]: https://github.com/ianwalter/release/actions
 [npUrl]: https://github.com/sindresorhus/np
 [yarnUrl]: https://yarnpkg.com/en/
-[lernaUrl]: https://lerna.js.org/
 [npmPublishUrl]: https://docs.npmjs.com/cli/publish
 [protectionsUrl]: https://help.github.com/en/articles/about-protected-branches
 [licenseUrl]: https://github.com/ianwalter/release/blob/master/LICENSE
