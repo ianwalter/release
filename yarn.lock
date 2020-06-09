@@ -114,11 +114,6 @@
   resolved "https://registry.yarnpkg.com/@ianwalter/clone/-/clone-4.1.0.tgz#635860922699338da607b8e990ae5173e3e3e9c9"
   integrity sha512-UWlp3DtPvLgZkS3hy6ihHQATjQC1BtoJxk4PCO/v7r8m7P4g0WkdacadpUh0ze3yNqO+uFIRW2RX1boGz7feQQ==
 
-"@ianwalter/clone@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/clone/-/clone-5.0.0.tgz#d5e20f3b9eccfbbb094f6f38e1cf6d31818b51ac"
-  integrity sha512-N0BlOwYog4ASu2OP+9q2xM3fvJDtFm4YhhZG2dmn0rmueJGhqC/OSJIHgixL6wORDP0w9+sRJdI97b0IoWBdYw==
-
 "@ianwalter/clone@^6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@ianwalter/clone/-/clone-6.0.1.tgz#b24e7ae22a8682c58e2ab23061dbc3b288466fad"
@@ -167,11 +162,6 @@
   resolved "https://registry.yarnpkg.com/@ianwalter/merge/-/merge-5.0.0.tgz#972b3cd668ab87416fba1af99186cd83d34d687f"
   integrity sha512-Z+Xn8dT0ApkjGizdwMQaCgsAyHO+zKhCC2OYO7lEYLs1IdCzXtRUYah3vkIWT8/Ad94ni0rxtR39VTRWJE1/Qw==
 
-"@ianwalter/merge@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/merge/-/merge-6.0.0.tgz#7d7facccc86fb407571c78de00a0bd2adca395cb"
-  integrity sha512-Ohskh/vqQFgW2Abaxd3kPYz/uNqoUmCSjU8kB8SoRieQqIOyXit1pFKYW4HmcoRcDFbktpWmS1QpIBoF74DGBg==
-
 "@ianwalter/merge@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@ianwalter/merge/-/merge-7.0.0.tgz#2fc97113eea21c1fd25132c8ddb93d3f20a83d04"
@@ -216,22 +206,6 @@
     "@ianwalter/clone" "^4.1.0"
     "@ianwalter/log" "^4.0.0"
     "@ianwalter/merge" "^5.0.0"
-    chalk "^3.0.0"
-    has-ansi "^4.0.0"
-    has-emoji "^1.1.0"
-    marked "^0.8.0"
-    marked-terminal "^4.0.0"
-    strip-ansi "^6.0.0"
-
-"@ianwalter/print@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-5.3.0.tgz#f5a73bbe387075d0ac5fb654943c81c181082d84"
-  integrity sha512-YkkUv/Bnwzu0qNqj3BCo1ZP19wk2kkYXYhFvgKGZqVpELRHEwOzo5pD4KszwhjvMUNiBOLYqOZO8C3OCx5+cXA==
-  dependencies:
-    "@ianwalter/chromafi" "^1.0.1"
-    "@ianwalter/clone" "^5.0.0"
-    "@ianwalter/log" "^4.0.0"
-    "@ianwalter/merge" "^6.0.0"
     chalk "^3.0.0"
     has-ansi "^4.0.0"
     has-emoji "^1.1.0"
