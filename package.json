@@ -42,7 +42,7 @@
     "latest-version": "^5.1.0",
     "new-github-release-url": "^1.0.0",
     "prompts": "^2.3.2",
-    "semver": "^7.1.2"
+    "semver": "^7.3.2"
   },
   "devDependencies": {
     "@ianwalter/bff": "^9.9.1",
