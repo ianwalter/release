@@ -134,6 +134,11 @@
     execa "^3.4.0"
     strip "^3.0.0"
 
+"@ianwalter/dot@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@ianwalter/dot/-/dot-1.0.4.tgz#32d9f98d59382475798c65bf686e95328327bfd3"
+  integrity sha512-bq6q4ZXWzQfBbE29i6trTwAtmmRzSWU0D/fSPhA/tDNbxhSlXDYUxfITtq1cctqi+s4BV4PgYIjxNkLeePK1mQ==
+
 "@ianwalter/eslint-config@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@ianwalter/eslint-config/-/eslint-config-5.3.0.tgz#47525e745966f39c456a8637b4e787201412dd19"
@@ -234,14 +239,16 @@
     marked-terminal "^4.0.0"
     strip-ansi "^6.0.0"
 
-"@ianwalter/print@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-7.0.0.tgz#fc19edec666817ebb67a5fd1d4500c076c3746c0"
-  integrity sha512-AXE7sZgEISpP0cGJY8DN/rI3G+wcDz1EL4KLEVFv2wvZwPaUQaH9qGGoacer1N9xVOGp1D8VSRJc3tJdHTu1MQ==
+"@ianwalter/print@^8.0.5":
+  version "8.0.5"
+  resolved "https://registry.yarnpkg.com/@ianwalter/print/-/print-8.0.5.tgz#6cb0eab5f6663ba1a02fc8f1e989d316f5b7ad87"
+  integrity sha512-i8wUEyEa9BZMbzhFHJ29CEjzZXBvu0ckjWkVZOuUOE96LkA3jI1vWtHD+EHzIK/r54STjUGKAp3EyeiEhK4e+w==
   dependencies:
     "@ianwalter/chromafi" "^1.0.1"
+    "@ianwalter/cli" "^4.1.0"
     "@ianwalter/clone" "^6.0.1"
-    "@ianwalter/log" "^4.0.0"
+    "@ianwalter/cloneable" "^2.0.0"
+    "@ianwalter/dot" "^1.0.4"
     "@ianwalter/merge" "^9.0.1"
     chalk "^4.1.0"
     has-ansi "^4.0.0"
