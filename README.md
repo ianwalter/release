@@ -1,3 +1,6 @@
+# Archived
+> I'm using [changesets](https://github.com/atlassian/changesets) instead!
+
 # @ianwalter/release
 > CLI workflow for releasing JavaScript packages
 
